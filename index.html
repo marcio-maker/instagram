@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>MAKERAI · 300 prompts</title>
+    <title>MAKERAI · 60 CARROSSÉIS · 300 PROMPTS · VERSÃO FINAL</title>
     <style>
         * {
             margin: 0;
@@ -254,19 +254,12 @@
         }
 
         .frase-destaque p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
-            line-height: 1.4;
-            text-align: center;
+            line-height: 1.5;
+            text-align: left;
             color: #ffffff;
-        }
-
-        .frase-destaque small {
-            display: block;
-            margin-top: 8px;
-            color: #ada8d0;
-            font-size: 0.8rem;
-            text-align: center;
+            white-space: pre-line;
         }
 
         .caixa-prompt {
@@ -292,7 +285,7 @@
             line-height: 1.5;
             color: #cdc9f0;
             white-space: pre-wrap;
-            max-height: 160px;
+            max-height: 200px;
             overflow-y: auto;
             background: #08070e;
             padding: 10px;
@@ -474,10 +467,10 @@
     <div class="container">
         <div class="header-row">
             <span class="logo">MAKERAI</span>
-            <span class="badge">300 prompts</span>
+            <span class="badge">60 carrosséis</span>
             <div class="stats-compact">
-                <div class="stat-item"><span class="stat-num" id="contadorGeracoes">0</span><span>/300</span></div>
-                <div class="stat-item"><span class="stat-num" id="temasRestantes">300</span><span>rest</span></div>
+                <div class="stat-item"><span class="stat-num" id="contadorGeracoes">0</span><span>/60</span></div>
+                <div class="stat-item"><span class="stat-num" id="temasRestantes">60</span><span>rest</span></div>
             </div>
             <div class="filtro-rapido">
                 <select id="filtroCategoria" style="width: auto; min-width: 100px;">
@@ -487,7 +480,7 @@
                     <option value="react">⚛️ React</option>
                     <option value="backend">🔧 Back-end</option>
                     <option value="github">🐙 GitHub</option>
-                    <option value="ia">🤖 IA (Ferramenta)</option>
+                    <option value="ia">🤖 IA</option>
                     <option value="carreira">🚀 Carreira</option>
                     <option value="softskills">🗣️ Soft Skills</option>
                     <option value="design">🎯 Design</option>
@@ -500,8 +493,8 @@
 
         <div class="grupo-info-row">
             <span class="categoria-tag" id="categoriaAtual">Programação</span>
-            <span class="grupo-tag" id="grupoAtual">Grupo 1/5</span>
-            <span class="progresso-tag" id="progressoGrupo">Post 1/5</span>
+            <span class="grupo-tag" id="grupoAtual">Carrossel</span>
+            <span class="progresso-tag" id="progressoGrupo">5 slides</span>
         </div>
 
         <div class="controles-grid">
@@ -527,10 +520,10 @@
         </div>
 
         <div id="resultado" class="resultado">
-            <div class="frase-destaque" id="frasePost"></div>
+            <div class="frase-destaque" id="textoCarrossel"></div>
 
             <div class="caixa-prompt">
-                <h4>📋 PROMPT PARA IMAGEM</h4>
+                <h4>📋 PROMPT PARA AS 5 IMAGENS (SEM TÍTULO DE ABERTURA)</h4>
                 <div class="prompt-texto" id="promptIA"></div>
             </div>
 
@@ -548,7 +541,7 @@
 
             <div class="acoes-grid">
                 <button class="btn-acoes" id="copiarPromptBtn"><span>📋</span> prompt</button>
-                <button class="btn-acoes" id="copiarFraseBtn"><span>💬</span> frase</button>
+                <button class="btn-acoes" id="copiarFraseBtn"><span>💬</span> legenda</button>
                 <button class="btn-acoes" id="copiarHashtagsBtn"><span>#️⃣</span> tags</button>
                 <button class="btn-acoes" id="copiarTudoBtn"><span>📑</span> tudo</button>
             </div>
@@ -556,445 +549,595 @@
     </div>
 
     <footer>
-        MAKERAI · 300 prompts em carrosséis de 5
+        MAKERAI · VERSÃO FINAL · 60 CARROSSÉIS · 300 PROMPTS · CADA GRUPO COM DNA ÚNICO
     </footer>
 
     <script>
-        function criarGrupo(tema, grupoNome, frases) {
-            return frases.map((f, idx) => ({
+        // ==================== FUNÇÃO PARA CRIAR GRUPO (5 SLICES) ====================
+        function criarCarrossel(tema, tituloGrupo, descricaoFundo, frasesArray) {
+            return {
                 tema: tema,
-                grupo: grupoNome,
-                sequencia: idx + 1,
-                totalGrupo: 5,
-                frase: f.frase,
-                subtitulo: f.subtitulo,
-                fundo: f.fundo
-            }));
+                titulo: tituloGrupo,
+                slides: frasesArray.map((item, idx) => ({
+                    sequencia: idx + 1,
+                    frase: item.frase,
+                    subtitulo: item.subtitulo
+                })),
+                fundo: descricaoFundo
+            };
         }
 
-        const promptsDatabase = [
-            ...criarGrupo('programacao', '🧠 Lógica e fundamentos', [
-                { frase: "Lógica é a base, código é só ferramenta", subtitulo: "Sem lógica, código não resolve nada", fundo: "quebra-cabeça lógico sendo resolvido, mente afiada" },
-                { frase: "Algoritmo é receita, dado é ingrediente", subtitulo: "Boa receita com ingrediente ruim = prato ruim", fundo: "receita sendo seguida, ingredientes frescos" },
-                { frase: "Estrutura de dados é a fundação da casa", subtitulo: "Escolha a estrutura certa para o problema", fundo: "fundação de casa, arrays, listas, árvores" },
-                { frase: "Pensar > Digitar (e muito)", subtitulo: "Raciocínio vale mais que syntaxe", fundo: "pessoa pensando profundamente, código mental" },
-                { frase: "Complexidade importa - O(n) faz diferença", subtitulo: "Algoritmo eficiente = usuário feliz", fundo: "gráfico de complexidade, tempo vs input" }
-            ]),
-            ...criarGrupo('programacao', '✨ Boas práticas', [
-                { frase: "Clean code não é luxo - é necessidade", subtitulo: "Código legível é código mantível", fundo: "código limpo, indentado, variáveis com nomes claros" },
-                { frase: "DRY: Don't Repeat Yourself (a menos que seja café)", subtitulo: "Repetição em código = dívida técnica", fundo: "código com funções reutilizáveis, elegância" },
-                { frase: "KISS: Keep It Simple (não seja o dev 'inteligente')", subtitulo: "Solução simples > código complexo que ninguém entende", fundo: "solução simples e clara, simplicidade visual" },
-                { frase: "YAGNI: You Ain't Gonna Need It (então não escreva)", subtitulo: "Código futuro é especulação, código presente é entrega", fundo: "código enxuto, sem firulas, foco" },
-                { frase: "Comentário explica o porquê, não o como", subtitulo: "O como está no código - leia ele", fundo: "código comentado explicando decisões de negócio" }
-            ]),
-            ...criarGrupo('programacao', '🐛 Debugging', [
-                { frase: "Debugging é ser detetive do seu próprio crime", subtitulo: "E 99% das vezes você é o culpado", fundo: "detetive investigando, lupa, código sendo debugado" },
-                { frase: "Console.log salva vidas (e empregos)", subtitulo: "Debug básico ainda é o mais usado", fundo: "console.log no código, debug simples mas eficaz" },
-                { frase: "O erro está entre a cadeira e o teclado", subtitulo: "PEBCAK - Problem Exists Between Chair And Keyboard", fundo: "dev olhando para o teclado, pensativo" },
-                { frase: "Leia o erro antes de sair mudando código", subtitulo: "A mensagem de erro está ali por um motivo", fundo: "dev lendo atentamente mensagem de erro" },
-                { frase: "Bug não é feature - corrija", subtitulo: "'Feature não documentada' só funciona uma vez", fundo: "bug sendo corrigido, dev concentrado" }
-            ]),
-            ...criarGrupo('programacao', '✅ Testes', [
-                { frase: "Teste é cinto de segurança - use sempre", subtitulo: "Melhor prevenir do que debugar em produção", fundo: "cinto de segurança sendo afivelado, código com testes" },
-                { frase: "Código sem teste é código quebrado esperando acontecer", subtitulo: "Teste não é opcional - é garantia", fundo: "código sem testes, alerta vermelho, perigo" },
-                { frase: "TDD: escreva o teste, depois o código", subtitulo: "Pensar no resultado antes de implementar", fundo: "teste sendo escrito primeiro, TDD em ação" },
-                { frase: "Teste automatizado dorme, você também", subtitulo: "Máquina testa, você descansa", fundo: "dev dormindo tranquilo, testes passando sozinhos" },
-                { frase: "Cobertura de teste não é 100%? Aceitável, mas cuidado", subtitulo: "100% é ideal, mas pragmatismo vence", fundo: "gráfico de cobertura, equilíbrio" }
-            ]),
-            ...criarGrupo('programacao', '📦 Versionamento', [
-                { frase: "Git não é opcional - é obrigação", subtitulo: "Trabalha sem git? Trabalha sem rede", fundo: "git em ação, commits, branches, organização" },
-                { frase: "Commit todo dia, evolua todo dia", subtitulo: "Verde no GitHub não é vício - é constância", fundo: "gráfico de contribuições todo verde, consistência" },
-                { frase: "Commit message conta história (escreva bem)", subtitulo: "'fix' não é mensagem - seja descritivo", fundo: "commit messages descritivas, histórico compreensível" },
-                { frase: "Branch organizada = time feliz", subtitulo: "Git flow, trunk based - escolha e siga", fundo: "branch strategy visualizada, organização" },
-                { frase: "git revert é perdão dos pecados", subtitulo: "Errou? git revert e segue o jogo", fundo: "git revert sendo executado, erro corrigido" }
-            ]),
-            ...criarGrupo('frontend', '🎨 HTML & CSS', [
-                { frase: "HTML é a estrutura, CSS é a roupa", subtitulo: "Esqueleto e estilo - ambos importam", fundo: "esqueleto de site sendo vestido com CSS" },
-                { frase: "CSS não é difícil, é detalhe (e os detalhes são o inferno)", subtitulo: "Paciência e prática dominam", fundo: "código CSS com ajustes finos, pixel perfeito" },
-                { frase: "Flexbox salvou vidas (e casamentos)", subtitulo: "Centralizar verticalmente deixou de ser pesadelo", fundo: "elementos perfeitamente centralizados com flexbox" },
-                { frase: "Grid é poder - use com responsabilidade", subtitulo: "Layouts complexos ficaram simples", fundo: "grid CSS em ação, linhas e colunas" },
-                { frase: "Responsividade é sobre se adaptar", subtitulo: "Seu layout precisa funcionar em qualquer tela", fundo: "mesmo site em diferentes dispositivos, adaptação" }
-            ]),
-            ...criarGrupo('frontend', '⚡ JavaScript', [
-                { frase: "JavaScript é a lingua franca da web", subtitulo: "Aprenda JS de verdade, o resto vem", fundo: "código JavaScript rodando, onipresença" },
-                { frase: "Event Loop é mágica (compreensível)", subtitulo: "Entenda como JS funciona de verdade", fundo: "event loop visualizado, call stack" },
-                { frase: "Closures são poderosas (e assustadoras no começo)", subtitulo: "Domine escopo, domine JS", fundo: "closure em ação, escopo preservado" },
-                { frase: "Assincronia é o superpoder do JS", subtitulo: "Promises, async/await - domine ou sofra", fundo: "código assíncrono, promises sendo resolvidas" },
-                { frase: "Vanilla JS ainda é rei", subtitulo: "Antes do framework, aprenda a linguagem", fundo: "JavaScript puro, sem frameworks, essência" }
-            ]),
-            ...criarGrupo('frontend', '🔧 Frameworks', [
-                { frase: "Framework é ferramenta, não religião", subtitulo: "Escolha o melhor para o problema", fundo: "diferentes frameworks, escolha consciente" },
-                { frase: "React, Vue, Angular - todos ensinam algo", subtitulo: "Conheça um, respeite os outros", fundo: "logos dos frameworks em harmonia" },
-                { frase: "Curva de aprendizado existe - persista", subtitulo: "Ninguém nasce sabendo framework", fundo: "curva de aprendizado, esforço valendo a pena" },
-                { frase: "Documentação é seu melhor amigo", subtitulo: "RTFM - Read The F****** Manual", fundo: "documentação sendo lida, entendimento" },
-                { frase: "Comunidade faz o framework - participe", subtitulo: "Open source vive de contribuição", fundo: "comunidade tech colaborando" }
-            ]),
-            ...criarGrupo('frontend', '🚀 Performance', [
-                { frase: "Performance é feature - não negocie", subtitulo: "Usuário não espera - 3 segundos e foi", fundo: "relâmpago, velocidade, carregamento rápido" },
-                { frase: "Core Web Vitals importam (pra caramba)", subtitulo: "Google mede - seu tráfego depende", fundo: "Core Web Vitals, métricas, otimização" },
-                { frase: "Imagem pesada = site lento", subtitulo: "Otimize imagens - sempre", fundo: "imagem sendo comprimida, otimização" },
-                { frase: "Lazy loading não é preguiça - é estratégia", subtitulo: "Carregue só o que precisa, quando precisa", fundo: "lazy loading em ação, carregamento sob demanda" },
-                { frase: "Bundle size importa - tree shake", subtitulo: "Código não usado é peso morto", fundo: "bundle sendo otimizado, tree shaking" }
-            ]),
-            ...criarGrupo('frontend', '♿ Acessibilidade', [
-                { frase: "Acessibilidade não é feature - é direito", subtitulo: "Web para todos, sem exceção", fundo: "pessoas com deficiência usando a web, inclusão" },
-                { frase: "Alt text descreve imagem - use", subtitulo: "Leitor de tela precisa entender", fundo: "código com alt text descritivo, acessibilidade" },
-                { frase: "Contraste não é opcional - é legibilidade", subtitulo: "Texto escuro em fundo escuro? Não", fundo: "alto contraste, legibilidade, WCAG" },
-                { frase: "Navegação por teclado é obrigatória", subtitulo: "Nem todo mundo usa mouse", fundo: "navegação por teclado, focus visível" },
-                { frase: "ARIA labels salvam vidas digitais", subtitulo: "Use quando HTML não basta", fundo: "ARIA labels em ação, acessibilidade avançada" }
-            ]),
-            ...criarGrupo('react', '🧩 Componentes', [
-                { frase: "Componente é bloco de Lego - reutilize", subtitulo: "Escreva uma vez, use sempre", fundo: "blocos de Lego formando UI, reutilização" },
-                { frase: "Props são parâmetros do sucesso", subtitulo: "Componente bem parametrizado é flexível", fundo: "props sendo passadas, fluxo de dados" },
-                { frase: "Componente puro é mais previsível", subtitulo: "Mesma props, mesmo resultado", fundo: "componente puro, previsibilidade" },
-                { frase: "Composição > Herança (sempre)", subtitulo: "Combine componentes, não estenda", fundo: "componentes sendo compostos, hierarquia" },
-                { frase: "Key em listas não é opcional", subtitulo: "React precisa saber quem é quem", fundo: "lista renderizada com keys únicas" }
-            ]),
-            ...criarGrupo('react', '🎣 Hooks', [
-                { frase: "Hooks mudaram minha vida (e meu código)", subtitulo: "useState, useEffect - ame-os", fundo: "hooks em ação, componentes funcionais" },
-                { frase: "useState é coração do componente", subtitulo: "Estado local bem gerenciado", fundo: "useState gerenciando estado, componente reagindo" },
-                { frase: "useEffect é ciclo de vida", subtitulo: "Monte, atualize, desmonte - com cuidado", fundo: "useEffect monitorando ciclo de vida" },
-                { frase: "useCallback memoiza funções", subtitulo: "Performance quando necessário", fundo: "useCallback evitando re-renders" },
-                { frase: "Custom hooks são superpoderes", subtitulo: "Crie seus próprios hooks - reuse lógica", fundo: "custom hook sendo criado, reuso" }
-            ]),
-            ...criarGrupo('react', '📊 Estado', [
-                { frase: "Estado local vs global - escolha bem", subtitulo: "Nem tudo precisa estar no Redux", fundo: "balança comparando estado local e global" },
-                { frase: "Prop drilling é evil - use Context", subtitulo: "Passar props por 10 níveis? Não", fundo: "contexto fluindo, prop drilling evitado" },
-                { frase: "Redux não é só estado - é padrão", subtitulo: "Aprender Redux ensina arquitetura", fundo: "Redux store, actions, reducers fluindo" },
-                { frase: "Zustand é alternativa leve", subtitulo: "Pequeno, rápido, eficiente", fundo: "Zustand store minimalista" },
-                { frase: "Imutabilidade é lei - não quebre", subtitulo: "Nunca mutle estado diretamente", fundo: "código respeitando imutabilidade" }
-            ]),
-            ...criarGrupo('react', '⚡ Performance', [
-                { frase: "React.memo evita re-renders", subtitulo: "Componente puro, menos renders", fundo: "React.memo evitando renders desnecessários" },
-                { frase: "useMemo otimiza cálculo pesado", subtitulo: "Memoização é vida", fundo: "useMemo otimizando cálculos" },
-                { frase: "Virtual DOM não é mágica - entenda", subtitulo: "Saber como funciona ajuda a otimizar", fundo: "virtual DOM sendo atualizado" },
-                { frase: "Code splitting = carregamento rápido", subtitulo: "Só carregue o que precisa agora", fundo: "código sendo dividido, lazy loading" },
-                { frase: "Bundle analyzer é seu amigo", subtitulo: "Veja o que está pesando", fundo: "bundle analyzer, visualização" }
-            ]),
-            ...criarGrupo('react', '🌐 Ecossistema', [
-                { frase: "Next.js é React que virou adulto", subtitulo: "SSR, SSG, ISR - tudo junto", fundo: "Next.js logo, server-side rendering" },
-                { frase: "React Native, React que vira app", subtitulo: "Mobile com o que você já sabe", fundo: "React Native rodando em iOS e Android" },
-                { frase: "Vite é velocidade pura", subtitulo: "Build em segundos, dev em milissegundos", fundo: "Vite logo, build rápido" },
-                { frase: "Tailwind + React = produtividade", subtitulo: "CSS sem sair do HTML", fundo: "Tailwind classes em componentes React" },
-                { frase: "React Router te leva pra vaga", subtitulo: "Rotas bem definidas = app bem estruturado", fundo: "rotas sendo navegadas, React Router" }
-            ]),
-            ...criarGrupo('backend', '🔌 APIs', [
-                { frase: "API bem feita é ponte de sucesso", subtitulo: "Documentação clara, devs felizes", fundo: "API documentation" },
-                { frase: "REST é padrão, GraphQL é evolução", subtitulo: "Cada um tem seu caso", fundo: "REST vs GraphQL" },
-                { frase: "Status code falam - aprenda", subtitulo: "200, 404, 500 - cada um tem seu lugar", fundo: "status codes HTTP" },
-                { frase: "Versionamento de API salva", subtitulo: "Não quebre quem usa", fundo: "versionamento de API" },
-                { frase: "Rate limite protege seu backend", subtitulo: "Não deixe abusarem", fundo: "rate limiting" }
-            ]),
-            ...criarGrupo('backend', '🗄️ Banco de dados', [
-                { frase: "Banco de dados é coração do sistema", subtitulo: "Cuide bem", fundo: "banco de dados, coração" },
-                { frase: "SQL é conversar com dados", subtitulo: "SELECT * FROM conhecimento", fundo: "SQL query" },
-                { frase: "NoSQL é flexibilidade", subtitulo: "Escolha a ferramenta certa", fundo: "NoSQL database" },
-                { frase: "Índices aceleram - use", subtitulo: "Sem índice, query lenta", fundo: "índices em banco de dados" },
-                { frase: "Backup não é opcional", subtitulo: "Quando perder, vai querer ter", fundo: "backup, segurança" }
-            ]),
-            ...criarGrupo('backend', '🏗️ Arquitetura', [
-                { frase: "Microserviços escalam, monolito simplifica", subtitulo: "Arquitetura depende do contexto", fundo: "microserviços vs monólito" },
-                { frase: "Message broker desacopla", subtitulo: "RabbitMQ, Kafka - filas salvam", fundo: "message broker" },
-                { frase: "Cache acelera, memória é ouro", subtitulo: "Redis, Memcached", fundo: "cache, velocidade" },
-                { frase: "Serverless é foco no código", subtitulo: "Infra que você não gerencia", fundo: "serverless" },
-                { frase: "Cloud é escala infinita", subtitulo: "Pague pelo que usar", fundo: "cloud computing" }
-            ]),
-            ...criarGrupo('backend', '🔒 Segurança', [
-                { frase: "Autenticação é segurança, não burocracia", subtitulo: "Proteja seus usuários", fundo: "autenticação, login" },
-                { frase: "JWT é identidade, session é estado", subtitulo: "Escolha a estratégia certa", fundo: "JWT token" },
-                { frase: "HTTPS não é opcional - é obrigatório", subtitulo: "Sem HTTPS, sem credibilidade", fundo: "HTTPS, cadeado" },
-                { frase: "SQL injection mata - previna", subtitulo: "ORM ajuda, mas não resolve tudo", fundo: "SQL injection prevention" },
-                { frase: "Senhas: hash + salt, sempre", subtitulo: "Nunca guarde texto puro", fundo: "hash de senhas" }
-            ]),
-            ...criarGrupo('backend', '⚙️ DevOps', [
-                { frase: "DevOps é cultura, não ferramenta", subtitulo: "Todo mundo é responsável", fundo: "DevOps cultura" },
-                { frase: "Docker encapsula, Kubernetes orquestra", subtitulo: "Container é leve, cluster é poder", fundo: "Docker, Kubernetes" },
-                { frase: "IaC é infra como código", subtitulo: "Versionar servidor é tão importante", fundo: "infra as code" },
-                { frase: "Monitoramento é visibilidade", subtitulo: "Veja o que acontece", fundo: "monitoring" },
-                { frase: "Logs são memória do sistema", subtitulo: "Quando quebra, é onde olha", fundo: "logs analysis" }
-            ]),
-            ...criarGrupo('github', '👤 Perfil', [
-                { frase: "GitHub é seu currículo vivo", subtitulo: "Recrutador olha antes do LinkedIn", fundo: "perfil do GitHub, contribuições verdes" },
-                { frase: "README do perfil é carta de apresentação", subtitulo: "Capriche na primeira impressão", fundo: "profile README criativo" },
-                { frase: "Contribuição todo dia faz diferença", subtitulo: "Verde consistente impressiona", fundo: "gráfico de contribuições verde" },
-                { frase: "Seus repositórios falam por você", subtitulo: "Código limpo = profissional confiável", fundo: "repositórios organizados" },
-                { frase: "Star em projeto é like em dev", subtitulo: "Reconheça trabalho alheio", fundo: "stars em repositórios" }
-            ]),
-            ...criarGrupo('github', '📦 Repositórios', [
-                { frase: "README bonito é portfólio que vende", subtitulo: "Documente como se fosse para seu chefe", fundo: "README bem formatado, emblemas" },
-                { frase: "License importa - escolha a certa", subtitulo: "Código sem licença = ninguém usa", fundo: "licenças open source" },
-                { frase: ".gitignore protege segredos", subtitulo: "Nunca suba .env", fundo: "gitignore configurado" },
-                { frase: "Issues são oportunidades de ajudar", subtitulo: "Resolva problemas, ganhe experiência", fundo: "issues sendo resolvidas" },
-                { frase: "Wiki é documentação viva", subtitulo: "Mantenha atualizada", fundo: "GitHub wiki, documentação" }
-            ]),
-            ...criarGrupo('github', '🤝 Colaboração', [
-                { frase: "Pull request é colaboração, não competição", subtitulo: "Code review é presente", fundo: "pull request sendo revisado" },
-                { frase: "Code review construtivo ensina", subtitulo: "Aprenda a dar e receber", fundo: "code review construtivo" },
-                { frase: "Fork é criar a partir do outro", subtitulo: "Inspire-se, adapte, melhore", fundo: "fork de repositório" },
-                { frase: "Clone é trazer pra perto", subtitulo: "Colabore localmente", fundo: "git clone sendo executado" },
-                { frase: "Open source é o MBA que não tem preço", subtitulo: "Contribuir ensina mais que curso", fundo: "contribuições open source" }
-            ]),
-            ...criarGrupo('github', '🔧 Git avançado', [
-                { frase: "Branch organizada = time feliz", subtitulo: "Git flow, trunk based - escolha", fundo: "branch strategy visualizada" },
-                { frase: "Commit message conta história", subtitulo: "'fix' não é mensagem", fundo: "commit messages descritivas" },
-                { frase: "Rebase vs merge - saiba a diferença", subtitulo: "Cada um tem seu lugar", fundo: "rebase vs merge visualizado" },
-                { frase: "git stash salva vidas", subtitulo: "Mudança não commitada? stash", fundo: "git stash em ação" },
-                { frase: "git revert é perdão dos pecados", subtitulo: "Errou? git revert e segue", fundo: "git revert sendo executado" }
-            ]),
-            ...criarGrupo('github', '⚙️ Automação', [
-                { frase: "GitHub Actions automatiza tudo", subtitulo: "CI/CD é modernidade", fundo: "GitHub Actions rodando" },
-                { frase: "Deploy automático = paz", subtitulo: "Push na main sobe sozinho", fundo: "deploy automático" },
-                { frase: "Testes automáticos salvam", subtitulo: "Rode antes de merge", fundo: "testes rodando no Actions" },
-                { frase: "Pages é site grátis", subtitulo: "Portfólio sem custo", fundo: "GitHub Pages ativo" },
-                { frase: "Badges mostram status do projeto", subtitulo: "Passing, failing - transparência", fundo: "badges no README" }
-            ]),
-            ...criarGrupo('ia', '💻 IA no dia a dia', [
-                { frase: "Copilot não pensa por você - ele só digita mais rápido", subtitulo: "A lógica ainda é sua", fundo: "copilot sugerindo código, dev revisando" },
-                { frase: "ChatGPT é ótimo, mas não confie cegamente", subtitulo: "Confira, verifique, teste", fundo: "ChatGPT respondendo, dev verificando" },
-                { frase: "Prompt engineering é o novo inglês", subtitulo: "Saber perguntar é a nova skill", fundo: "prompt sendo digitado, IA respondendo" },
-                { frase: "IA acelera, você entrega", subtitulo: "Mais rápido, mas não mais descuidado", fundo: "IA acelerando processo, dev entregando" },
-                { frase: "Stack Overflow + ChatGPT = dev completo", subtitulo: "Use todas as ferramentas", fundo: "Stack Overflow e ChatGPT lado a lado" }
-            ]),
-            ...criarGrupo('ia', '🛠️ Ferramentas de IA', [
-                { frase: "Midjourney cria, você implementa", subtitulo: "Design com IA é parceria", fundo: "imagem do Midjourney sendo implementada" },
-                { frase: "Claude, GPT, Gemini - cada um tem seu forte", subtitulo: "Escolha a ferramenta certa", fundo: "diferentes IAs, comparação" },
-                { frase: "Fine tuning é personalização", subtitulo: "Modelo sob medida para seu problema", fundo: "modelo sendo fine-tunado" },
-                { frase: "Embeddings são a nova linguagem", subtitulo: "Vetores que representam significado", fundo: "embeddings, vetores, significado" },
-                { frase: "RAG: contexto sem retreinar", subtitulo: "Busca + IA = precisão", fundo: "RAG em ação, busca + geração" }
-            ]),
-            ...criarGrupo('ia', '🤖 Fundamentos de IA', [
-                { frase: "IA não é magia - é matemática", subtitulo: "Estatística + computação = IA", fundo: "fórmulas matemáticas, dados, algoritmos" },
-                { frase: "Machine learning é estatística que aprende", subtitulo: "Dados entram, modelo sai", fundo: "gráficos estatísticos, ML aprendendo" },
-                { frase: "Dados de qualidade = modelo inteligente", subtitulo: "Garbage in, garbage out - sempre", fundo: "dados limpos, modelo eficiente" },
-                { frase: "Overfitting é decorar, não aprender", subtitulo: "Seu modelo precisa generalizar", fundo: "overfitting visualizado, modelo decorando" },
-                { frase: "Underfitting é preguiça do modelo", subtitulo: "Dê mais dados ou melhore features", fundo: "underfitting, modelo simples demais" }
-            ]),
-            ...criarGrupo('ia', '⚖️ Ética em IA', [
-                { frase: "IA com viés é perigosa - cuidado", subtitulo: "Dados tendenciosos = modelo preconceituoso", fundo: "balança da justiça, dados tendenciosos" },
-                { frase: "Transparência importa - explique seu modelo", subtitulo: "Caixa preta não é aceitável", fundo: "caixa transparente, modelo explicável" },
-                { frase: "Privacidade não é opcional", subtitulo: "Dados do usuário merecem respeito", fundo: "cadeado, proteção de dados, privacidade" },
-                { frase: "IA substitui tarefas, não pessoas", subtitulo: "Ferramenta nas mãos certas", fundo: "humano e IA colaborando, não competindo" },
-                { frase: "Responsabilidade é sua, não da IA", subtitulo: "Você responde pelo que a IA gera", fundo: "dev responsável, decisão final" }
-            ]),
-            ...criarGrupo('ia', '🔮 Futuro com IA', [
-                { frase: "O dev do futuro é um curador de IA", subtitulo: "Escolher o que usar é o diferencial", fundo: "dev selecionando outputs de IA" },
-                { frase: "IA não vai te substituir, mas um dev com IA vai", subtitulo: "Adapte-se ou fique para trás", fundo: "humano e robô trabalhando juntos" },
-                { frase: "Aprender a aprender com IA é nova skill", subtitulo: "Ensine a IA a te ensinar", fundo: "ciclo de aprendizado humano-IA" },
-                { frase: "O futuro é colaboração humano-IA", subtitulo: "Juntos somos mais fortes", fundo: "humano e IA de mãos dadas" },
-                { frase: "IA é ferramenta, não substituta", subtitulo: "Martelo não constrói casa sozinho", fundo: "caixa de ferramentas com IA destacada" }
-            ]),
-            ...criarGrupo('carreira', '🚀 Começando na carreira', [
-                { frase: "O primeiro commit é o mais difícil (depois vem o vício)", subtitulo: "Todo mundo começa do zero - inclusive você", fundo: "dev iniciante fazendo primeiro commit, tela brilhando, emoção, setup simples mas dedicado" },
-                { frase: "Junior não é quem não sabe, é quem está aprendendo (e tudo bem)", subtitulo: "Todo sênior já foi junior - lembre disso", fundo: "dev jovem estudando, livros, código, determinação, luz suave" },
-                { frase: "Seu primeiro portfólio não precisa ser perfeito, precisa existir", subtitulo: "Feito é melhor que perfeito - comece", fundo: "primeiro portfólio online, simples mas funcional, dev orgulhoso" },
-                { frase: "Errar no início é esperado, desistir é opcional", subtitulo: "Bug não é fracasso - é aprendizado compilado", fundo: "dev errando, rindo, tentando de novo, resiliência" },
-                { frase: "Você não precisa saber tudo, precisa saber aprender", subtitulo: "Aprender a aprender é a habilidade mais importante", fundo: "dev pesquisando, Google, livros, curiosidade" }
-            ]),
-            ...criarGrupo('carreira', '📈 Crescimento profissional', [
-                { frase: "Promoção não cai do céu, cai de código entregue", subtitulo: "Resultado fala mais alto que horas trabalhadas", fundo: "dev sendo promovido, celebração, reconhecimento, team feliz" },
-                { frase: "Seu salário é reflexo dos problemas que você resolve", subtitulo: "Quanto maior o problema, maior a recompensa", fundo: "dev resolvendo problema complexo, insight, lâmpada" },
-                { frase: "Pleno é quem entrega sem precisar de supervisão", subtitulo: "Autonomia é o marco da senioridade", fundo: "dev trabalhando independente, confiante, foco" },
-                { frase: "Sênior é quem ensina enquanto entrega", subtitulo: "Compartilhar conhecimento multiplica impacto", fundo: "sênior mentorando juniors, troca, aprendizado" },
-                { frase: "Tech Lead não é quem mais codifica, é quem mais facilita", subtitulo: "Liderança técnica é sobre pessoas, não código", fundo: "tech lead facilitando reunião, time colaborando" }
-            ]),
-            ...criarGrupo('carreira', '💼 Mercado de trabalho', [
-                { frase: "Entrevista técnica é via de mão dupla (você também escolhe)", subtitulo: "Não é só eles te avaliarem - avalie a empresa também", fundo: "entrevista técnica acontecendo, ambos confiantes, respeito" },
-                { frase: "Seu LinkedIn é seu outdoor 24/7 - mantenha atualizado", subtitulo: "Recrutador pesquisa antes de chamar", fundo: "perfil do LinkedIn otimizado, conexões, recomendações" },
-                { frase: "Network não é só coletar contatos, é cultivar relações", subtitulo: "Conexão verdadeira abre portas que currículo não abre", fundo: "pessoas conectando genuinamente, eventos, conversas" },
-                { frase: "Salário não é tudo, mas também não é nada (negocie)", subtitulo: "Conheça seu valor e peça o justo", fundo: "negociação salarial, confiança, equilíbrio" },
-                { frase: "CLT vs PJ vs gringa: escolha seu estilo de vida", subtitulo: "Não existe certo ou errado, existe o que cabe em você", fundo: "balança comparando modelos de trabalho, decisão" }
-            ]),
-            ...criarGrupo('carreira', '⚡ Desafios da carreira', [
-                { frase: "Burnout não é badge de honra - descanse", subtitulo: "Trabalhar 12h por dia não te faz melhor", fundo: "dev descansando, equilíbrio, natureza, paz" },
-                { frase: "Síndrome do impostor ataca todo mundo (até sênior)", subtitulo: "Você não é o único que se sente assim", fundo: "dev confiante apesar das dúvidas, superação" },
-                { frase: "Frustração faz parte - respire e continue", subtitulo: "Bug não resolve na base da raiva - pausa ajuda", fundo: "dev frustrado mas respirando fundo, calma" },
-                { frase: "Comparação com os outros é o ladrão da alegria", subtitulo: "Sua jornada é única - foque nela", fundo: "dev focado no próprio progresso, ignorando comparações" },
-                { frase: "Pedir ajuda não é fraqueza - é inteligência", subtitulo: "Ninguém constrói nada sozinho", fundo: "dev pedindo ajuda, colega ajudando, time" }
-            ]),
-            ...criarGrupo('carreira', '🎯 Planejamento de carreira', [
-                { frase: "Plano de carreira é mapa, não GPS (pode mudar)", subtitulo: "Tenha direção, mas seja flexível", fundo: "mapa de carreira, rotas alternativas, flexibilidade" },
-                { frase: "Objetivo anual, metas mensais, ação diária", subtitulo: "Grande objetivo se constrói todo dia", fundo: "planejamento, metas, ação consistente" },
-                { frase: "Estudar todo dia 1h > estudar 7h no domingo", subtitulo: "Consistência supera intensidade", fundo: "estudo diário, rotina, progresso constante" },
-                { frase: "Side project não é opcional - é diferencial", subtitulo: "Projeto próprio mostra paixão e proatividade", fundo: "side project sendo desenvolvido, paixão, criatividade" },
-                { frase: "Sua carreira é sua, não da empresa - assuma o controle", subtitulo: "Você é o CEO da sua própria carreira", fundo: "dev no controle do próprio destino, confiança" }
-            ]),
-            ...criarGrupo('softskills', '🗣️ Comunicação', [
-                { frase: "Comunicação é tão importante quanto código", subtitulo: "Explique suas decisões", fundo: "pessoas conversando, dialogando" },
-                { frase: "Saber ouvir é skill rara", subtitulo: "Escute antes de falar", fundo: "escuta ativa, atenção" },
-                { frase: "Reunião produtiva tem pauta", subtitulo: "Sem pauta, sem reunião", fundo: "reunião eficiente, pauta clara" },
-                { frase: "Feedback é presente, não crítica", subtitulo: "Dê e receba bem", fundo: "feedback construtivo" },
-                { frase: "Comunique problemas cedo", subtitulo: "Esconder só piora", fundo: "dev comunicando problema" }
-            ]),
-            ...criarGrupo('softskills', '👥 Trabalho em equipe', [
-                { frase: "Sozinho vai mais rápido, junto vai mais longe", subtitulo: "Time vence individual", fundo: "equipe unida, colaborando" },
-                { frase: "Conflitos acontecem - resolva com respeito", subtitulo: "Diferentes opiniões, mesmo objetivo", fundo: "resolução de conflitos" },
-                { frase: "Celebre vitórias do time", subtitulo: "Sucesso coletivo é melhor", fundo: "comemoração coletiva" },
-                { frase: "Apoie colegas em dificuldade", subtitulo: "Hoje por eles, amanhã por você", fundo: "ajuda mútua no trabalho" },
-                { frase: "Diversidade fortalece o time", subtitulo: "Diferentes perspectivas = melhores soluções", fundo: "time diverso e feliz" }
-            ]),
-            ...criarGrupo('softskills', '👑 Liderança', [
-                { frase: "Liderança não é cargo - é atitude", subtitulo: "Inspire onde estiver", fundo: "liderança, inspiração" },
-                { frase: "Líder serve o time, não o contrário", subtitulo: "Servant leadership", fundo: "líder ajudando o time" },
-                { frase: "Delegar não é fugir - é confiar", subtitulo: "Confie no seu time", fundo: "delegação, confiança" },
-                { frase: "Reconheça o bom trabalho", subtitulo: "Elogio público motiva", fundo: "reconhecimento, palmas" },
-                { frase: "Seja exemplo, não só chefe", subtitulo: "Atitudes falam mais", fundo: "líder como exemplo" }
-            ]),
-            ...criarGrupo('softskills', '🧠 Inteligência emocional', [
-                { frase: "Respire antes de reagir", subtitulo: "Calma resolve mais que pressa", fundo: "calma, respiração" },
-                { frase: "Frustração faz parte - gerencie", subtitulo: "Bug não resolve na raiva", fundo: "dev frustrado mas controlando" },
-                { frase: "Autoconhecimento é superpoder", subtitulo: "Saiba seus pontos fortes", fundo: "reflexão, autoconhecimento" },
-                { frase: "Empatia com colega faz diferença", subtitulo: "Todo mundo tem dias ruins", fundo: "empatia, compreensão" },
-                { frase: "Resiliência é aprender com queda", subtitulo: "Cair, levantar, seguir", fundo: "pessoa levantando após queda" }
-            ]),
-            ...criarGrupo('softskills', '⚡ Produtividade', [
-                { frase: "Pomodoro > 8h diretas", subtitulo: "Foco + pausa = resultado", fundo: "técnica pomodoro, timer" },
-                { frase: "Priorize: importante vs urgente", subtitulo: "Matriz Eisenhower salva", fundo: "matriz de prioridades" },
-                { frase: "Multitarefa é mito - foque", subtitulo: "Uma coisa de cada vez", fundo: "foco, uma tarefa" },
-                { frase: "Descanse - burnout não é badge", subtitulo: "Produtivo descansa", fundo: "dev descansando, paz" },
-                { frase: "Planejamento evita correria", subtitulo: "Organize-se para entregar", fundo: "planejamento, agenda" }
-            ]),
-            ...criarGrupo('design', '🎯 Fundamentos', [
-                { frase: "Design é resolver problemas, não só embelezar", subtitulo: "Forma segue função - sempre", fundo: "problema sendo resolvido pelo design" },
-                { frase: "Hierarquia visual guia o olhar", subtitulo: "O que é mais importante? Mostre", fundo: "hierarquia visual clara, elementos em ordem" },
-                { frase: "Contraste não é opcional - é legibilidade", subtitulo: "Texto tem que ser lido", fundo: "alto contraste, legibilidade" },
-                { frase: "Espaço em branco é respiro", subtitulo: "Menos poluição, mais foco", fundo: "design com espaço em branco, elegância" },
-                { frase: "Consistência cria confiança", subtitulo: "Padrões são seus amigos", fundo: "elementos consistentes repetidos" }
-            ]),
-            ...criarGrupo('design', '🖌️ UI Design', [
-                { frase: "UI é a roupa do produto", subtitulo: "Primeira impressão importa", fundo: "interface bonita, primeira impressão" },
-                { frase: "Cores comunicam antes das palavras", subtitulo: "Psicologia das cores não é mimimi", fundo: "psicologia das cores, emoções" },
-                { frase: "Tipografia é a voz do design", subtitulo: "Escolha bem suas fontes", fundo: "tipografias, hierarquia" },
-                { frase: "Pixel perfeito é estado de espírito", subtitulo: "Detalhe faz diferença", fundo: "lupa examinando pixels" },
-                { frase: "Microinterações criam conexão", subtitulo: "Pequenos detalhes encantam", fundo: "microinterações, animações sutis" }
-            ]),
-            ...criarGrupo('design', '🧭 UX Design', [
-                { frase: "UX é a ponte entre usuário e tecnologia", subtitulo: "Seu avô precisa entender também", fundo: "ponte conectando usuário à tecnologia" },
-                { frase: "Usuário não lê - ele escaneia", subtitulo: "Padrão F, padrão Z - conheça", fundo: "padrão de leitura F, escaneamento" },
-                { frase: "Feedback do usuário é o norte", subtitulo: "Ouça quem usa", fundo: "feedback loop, melhorias" },
-                { frase: "Jornada do usuário é um mapa", subtitulo: "Entenda cada passo", fundo: "mapa de jornada, touchpoints" },
-                { frase: "Teste com usuário - sempre", subtitulo: "Você não é seu usuário", fundo: "teste de usabilidade, observação" }
-            ]),
-            ...criarGrupo('design', '📚 Design System', [
-                { frase: "Design system é consistência em escala", subtitulo: "Time grande, padrão único", fundo: "design system documentado" },
-                { frase: "Componentes reutilizáveis salvam", subtitulo: "Não reinvente a roda", fundo: "componentes em biblioteca" },
-                { frase: "Tokens de design são a base", subtitulo: "Cores, espaçamentos, tipografia", fundo: "design tokens, variáveis" },
-                { frase: "Documentação é lei - siga", subtitulo: "Time alinhado = produto consistente", fundo: "documentação sendo lida" },
-                { frase: "Evolua o sistema, não quebre", subtitulo: "Mudanças graduais, não revoluções", fundo: "evolução do design system" }
-            ]),
-            ...criarGrupo('design', '🔧 Ferramentas', [
-                { frase: "Figma é o novo Photoshop (e melhor)", subtitulo: "Colaboração em tempo real", fundo: "Figma aberto, times colaborando" },
-                { frase: "Wireframe é esqueleto, protótipo é pele", subtitulo: "Valide antes de investir", fundo: "wireframe evoluindo para protótipo" },
-                { frase: "Design e dev precisam conversar", subtitulo: "Handoff sem atrito", fundo: "designer e dev conversando" },
-                { frase: "Iteração é caminho para perfeição", subtitulo: "Nunca fica pronto, sempre melhora", fundo: "versões iterativas do design" },
-                { frase: "Inspiração não cai do céu - busque", subtitulo: "Referências são combustível", fundo: "mood board, referências" }
-            ]),
-            ...criarGrupo('dados', '📊 Fundamentos', [
-                { frase: "Dado é o novo petróleo - refine", subtitulo: "Coletar é fácil, extrair valor é skill", fundo: "dados brutos sendo refinados" },
-                { frase: "Qualidade do dado define tudo", subtitulo: "Garbage in, garbage out", fundo: "dados de qualidade" },
-                { frase: "Correlação não é causalidade", subtitulo: "Nem tudo é o que parece", fundo: "correlação vs causalidade" },
-                { frase: "Outlier é erro ou oportunidade", subtitulo: "Investigue antes de ignorar", fundo: "outliers destacados" },
-                { frase: "Dado sem contexto é número perdido", subtitulo: "Conte a história completa", fundo: "dados com contexto" }
-            ]),
-            ...criarGrupo('dados', '📈 Análise', [
-                { frase: "Analytics entende usuário", subtitulo: "Números contam histórias", fundo: "dashboard analytics" },
-                { frase: "Métrica certa, decisão certa", subtitulo: "KPI errado leva ao caminho errado", fundo: "KPIs corretos" },
-                { frase: "A/B testing otimiza conversão", subtitulo: "Deixe os dados decidirem", fundo: "A/B testing visualizado" },
-                { frase: "Dashboard é visão 360", subtitulo: "O que não é medido não é gerenciado", fundo: "dashboard completo" },
-                { frase: "Data driven é cultura", subtitulo: "Achismo vs evidência", fundo: "decisões baseadas em dados" }
-            ]),
-            ...criarGrupo('dados', '📉 Visualização', [
-                { frase: "Visualização conta história", subtitulo: "Gráfico vale mais que tabela", fundo: "visualização de dados" },
-                { frase: "Gráfico certo, insight na hora", subtitulo: "Escolha a visualização certa", fundo: "gráficos variados" },
-                { frase: "Storytelling com dados", subtitulo: "Comunique com clareza", fundo: "storytelling com dados" },
-                { frase: "Cores em gráficos importam", subtitulo: "Não confunda o usuário", fundo: "cores em gráficos" },
-                { frase: "Simplicidade em visualização vence", subtitulo: "Menos é mais", fundo: "gráfico simples e claro" }
-            ]),
-            ...criarGrupo('dados', '🌊 Big Data', [
-                { frase: "Big data é volume, insight é valor", subtitulo: "Não adianta ter e não usar", fundo: "big data, insights" },
-                { frase: "Data pipeline é o escoamento", subtitulo: "Do dado bruto ao insight", fundo: "pipeline de dados" },
-                { frase: "Escala horizontal é o caminho", subtitulo: "Mais máquinas, não mais poder", fundo: "cluster de servidores" },
-                { frase: "Batch vs stream - quando usar", subtitulo: "Tempo real nem sempre é necessário", fundo: "batch vs streaming" },
-                { frase: "Data lake é oceano de dados", subtitulo: "Tudo guardado, tudo disponível", fundo: "data lake, armazenamento" }
-            ]),
-            ...criarGrupo('dados', '🔒 Ética', [
-                { frase: "Privacidade é direito - respeite", subtitulo: "LGPD não é brincadeira", fundo: "privacidade, proteção" },
-                { frase: "Anonimização não é opcional", subtitulo: "Proteja dados sensíveis", fundo: "anonimização de dados" },
-                { frase: "Viés em dados é perigoso", subtitulo: "Dados tendenciosos = decisões erradas", fundo: "viés, preconceito em dados" },
-                { frase: "Transparência gera confiança", subtitulo: "Explique como usa dados", fundo: "transparência, confiança" },
-                { frase: "Dado com propósito transforma", subtitulo: "Use para o bem", fundo: "dados transformando vidas" }
-            ]),
-            ...criarGrupo('inovacao', '💡 Mindset inovador', [
-                { frase: "Inovação é necessidade, não luxo", subtitulo: "Evoluir ou ficar para trás", fundo: "inovação, evolução" },
-                { frase: "Questionar o status quo é o primeiro passo", subtitulo: "Por que sempre foi assim?", fundo: "questionamento, mudança" },
-                { frase: "Errar rápido, aprender rápido", subtitulo: "Falha é dado para acertar", fundo: "erro, aprendizado" },
-                { frase: "Curiosidade move a inovação", subtitulo: "Pergunte 'e se...'", fundo: "curiosidade, descoberta" },
-                { frase: "Inovação não tem idade", subtitulo: "Comece agora", fundo: "idade, inovação" }
-            ]),
-            ...criarGrupo('inovacao', '🎨 Processo criativo', [
-                { frase: "Inspiração existe - mas busca", subtitulo: "Não espere cair do céu", fundo: "inspiração, busca" },
-                { frase: "Brainstorm sem julgamento primeiro", subtitulo: "Toda ideia é bem-vinda", fundo: "brainstorm, ideias" },
-                { frase: "Prototipe rápido, valide cedo", subtitulo: "Mão na massa logo", fundo: "protótipo rápido" },
-                { frase: "Feedback é combustível da inovação", subtitulo: "Mostre, receba, melhore", fundo: "feedback, melhoria" },
-                { frase: "Iteração leva à perfeição", subtitulo: "Nunca fica pronto, sempre melhora", fundo: "iteração, evolução" }
-            ]),
-            ...criarGrupo('inovacao', '🚀 Tecnologias emergentes', [
-                { frase: "IA generativa mudou o jogo", subtitulo: "Acompanhe ou fique", fundo: "IA generativa" },
-                { frase: "Blockchain vai além de cripto", subtitulo: "Descentralização é o futuro", fundo: "blockchain" },
-                { frase: "IoT conecta o mundo físico", subtitulo: "Coisas que falam", fundo: "Internet of Things" },
-                { frase: "Edge computing é o novo cloud", subtitulo: "Processamento perto do usuário", fundo: "edge computing" },
-                { frase: "Web3 ainda está começando", subtitulo: "Acompanhe de perto", fundo: "Web3" }
-            ]),
-            ...criarGrupo('inovacao', '🔧 Inovação na prática', [
-                { frase: "Hackathon gera inovação", subtitulo: "24h, café, código", fundo: "hackathon, times" },
-                { frase: "Side project vira startup", subtitulo: "Histórias que começam assim", fundo: "side project evoluindo" },
-                { frase: "Open source acelera inovação", subtitulo: "Construir junto é mais rápido", fundo: "open source" },
-                { frase: "Inovação não precisa ser complexa", subtitulo: "Simples que resolve", fundo: "solução simples" },
-                { frase: "Tecnologia com propósito transforma", subtitulo: "Impacto real", fundo: "propósito, transformação" }
-            ]),
-            ...criarGrupo('inovacao', '🔮 Futuro', [
-                { frase: "O futuro é digital, mas humano", subtitulo: "Tecnologia com propósito", fundo: "futuro digital e humano" },
-                { frase: "Construa seu legado", subtitulo: "Marcas que ficam", fundo: "legado" },
-                { frase: "Você não sabe quem está te observando", subtitulo: "Inspiração em ação", fundo: "observação, inspiração" },
-                { frase: "O melhor código ainda está por vir", subtitulo: "Futuro em construção", fundo: "futuro, código" },
-                { frase: "Continue inovando, continue evoluindo", subtitulo: "Não pare", fundo: "evolução contínua" }
-            ]),
-            ...criarGrupo('curtas', '🧹 Código limpo', [
-                { frase: "Menos código, mais solução", subtitulo: "Quantidade não é qualidade", fundo: "poucas linhas, muito resultado" },
-                { frase: "Legível > Inteligente", subtitulo: "Código claro é código mantível", fundo: "código legível" },
-                { frase: "Clean code sempre vence", subtitulo: "Qualidade acima de quantidade", fundo: "clean code" },
-                { frase: "Simplicidade é poder", subtitulo: "Complexidade é inimiga", fundo: "simplicidade" },
-                { frase: "Refatorar é preciso", subtitulo: "Evolução contínua", fundo: "refatoração" }
-            ]),
-            ...criarGrupo('curtas', '🐛 Debug', [
-                { frase: "Bug é feature não documentada", subtitulo: "Ou só um erro mesmo", fundo: "bug, humor" },
-                { frase: "Apressado come bug", subtitulo: "Pressa é inimiga da qualidade", fundo: "pressa, bugs" },
-                { frase: "Console.log salva", subtitulo: "Debug simples e eficaz", fundo: "console.log" },
-                { frase: "O erro está entre a cadeira e o teclado", subtitulo: "PEBCAK clássico", fundo: "dev e teclado" },
-                { frase: "Leia o erro antes de agir", subtitulo: "A mensagem está ali por um motivo", fundo: "mensagem de erro" }
-            ]),
-            ...criarGrupo('curtas', '⚡ Produtividade', [
-                { frase: "Foco é tudo", subtitulo: "Sem distração, sem erro", fundo: "foco" },
-                { frase: "Consistência vence", subtitulo: "Pequeno todo dia", fundo: "consistência" },
-                { frase: "Menos ansiedade, mais entrega", subtitulo: "Planejamento traz paz", fundo: "paz, entrega" },
-                { frase: "Pensar > Digitar", subtitulo: "Raciocínio vale ouro", fundo: "pensamento profundo" },
-                { frase: "Código limpo, mente sã", subtitulo: "Organização mental", fundo: "mente sã, código limpo" }
-            ]),
-            ...criarGrupo('curtas', '🤔 Filosofia dev', [
-                { frase: "Programar é resolver problemas", subtitulo: "Computador só executa", fundo: "problemas sendo resolvidos" },
-                { frase: "Código é poesia em lógica", subtitulo: "Elegância também importa", fundo: "código poético" },
-                { frase: "Documentação é amor ao próximo", subtitulo: "Inclusive ao seu eu do futuro", fundo: "documentação" },
-                { frase: "Teste é segurança, não burocracia", subtitulo: "Dormir tranquilo", fundo: "testes passando" },
-                { frase: "Código é contrato", subtitulo: "Compromisso com a qualidade", fundo: "contrato, código" }
-            ]),
-            ...criarGrupo('curtas', '🌟 Carreira e vida', [
-                { frase: "Sua carreira é sua", subtitulo: "Assuma o controle", fundo: "controle da carreira" },
-                { frase: "Aprenda sempre", subtitulo: "Nunca sabe tudo", fundo: "aprendizado contínuo" },
-                { frase: "Compartilhe conhecimento", subtitulo: "Ele volta", fundo: "compartilhamento" },
-                { frase: "Celebre pequenas vitórias", subtitulo: "Cada commit conta", fundo: "celebração" },
-                { frase: "Continue codando", subtitulo: "O melhor ainda vem", fundo: "continuidade" }
-            ])
+        // ==================== BASE DE CARROSSÉIS - 60 GRUPOS COMPLETOS ====================
+        const carrosseisDatabase = [
+            // 1-5: PROGRAMAÇÃO
+            criarCarrossel('programacao', '🧠 Lógica e fundamentos',
+                'quebra-cabeça lógico sendo resolvido, mente afiada, engrenagens mentais, pensamento abstrato',
+                [
+                    { frase: 'Lógica é a base, código é só ferramenta.', subtitulo: 'Sem lógica, o código não resolve nada.' },
+                    { frase: 'Algoritmo é receita, dado é ingrediente.', subtitulo: 'Boa receita com ingrediente ruim = prato ruim.' },
+                    { frase: 'Estrutura de dados é a fundação da casa.', subtitulo: 'Escolha a estrutura certa para o problema.' },
+                    { frase: 'Pensar > Digitar (e muito).', subtitulo: 'Raciocínio vale mais que sintaxe.' },
+                    { frase: 'Complexidade importa — O(n) faz diferença.', subtitulo: 'Algoritmo eficiente = usuário feliz.' }
+                ]),
+            criarCarrossel('programacao', '✨ Boas práticas',
+                'código limpo, indentado, variáveis com nomes claros, simplicidade, clean code',
+                [
+                    { frase: 'Código limpo não é luxo, é necessidade.', subtitulo: 'Código legível é código mantível.' },
+                    { frase: 'DRY: Don\'t Repeat Yourself (a menos que seja café).', subtitulo: 'Repetição em código = dívida técnica.' },
+                    { frase: 'KISS: Keep It Simple (não seja o dev “inteligente”).', subtitulo: 'Solução simples > código complexo que ninguém entende.' },
+                    { frase: 'YAGNI: You Ain\'t Gonna Need It (então não escreva).', subtitulo: 'Código futuro é especulação; código presente é entrega.' },
+                    { frase: 'Comentário explica o porquê, não o como.', subtitulo: 'O como está no código — leia ele.' }
+                ]),
+            criarCarrossel('programacao', '🐛 Depuração',
+                'detetive investigando, lupa sobre código, erros destacados, debug console',
+                [
+                    { frase: 'Depurar é ser detetive do seu próprio crime.', subtitulo: 'E 99% das vezes você é o culpado.' },
+                    { frase: 'Console.log salva vidas (e empregos).', subtitulo: 'Debug básico ainda é o mais usado.' },
+                    { frase: 'O erro está entre a cadeira e o teclado.', subtitulo: 'PEBCAK — Problem Exists Between Chair And Keyboard.' },
+                    { frase: 'Leia o erro antes de sair mudando código.', subtitulo: 'A mensagem de erro está ali por um motivo.' },
+                    { frase: 'Bug não é feature — corrija.', subtitulo: '“Feature não documentada” só funciona uma vez.' }
+                ]),
+            criarCarrossel('programacao', '✅ Testes',
+                'cinto de segurança sendo afivelado, código com testes automatizados, TDD',
+                [
+                    { frase: 'Teste é cinto de segurança: use sempre.', subtitulo: 'Melhor prevenir do que depurar em produção.' },
+                    { frase: 'Código sem teste é código quebrado esperando para acontecer.', subtitulo: 'Teste não é opcional — é garantia.' },
+                    { frase: 'TDD: escreva o teste, depois o código.', subtitulo: 'Pensar no resultado antes de implementar.' },
+                    { frase: 'Teste automatizado dorme, você também.', subtitulo: 'A máquina testa, você descansa.' },
+                    { frase: 'Cobertura de teste não é 100%? Aceitável, mas cuidado.', subtitulo: '100% é ideal, mas pragmatismo vence.' }
+                ]),
+            criarCarrossel('programacao', '📦 Versionamento',
+                'git em ação, commits, branches, organização visual, repositório',
+                [
+                    { frase: 'Git não é opcional — é obrigação.', subtitulo: 'Trabalha sem git? Trabalha sem rede.' },
+                    { frase: 'Commit todo dia, evolua todo dia.', subtitulo: 'Verde no GitHub não é vício — é constância.' },
+                    { frase: 'Mensagem de commit conta história (escreva bem).', subtitulo: '“fix” não é mensagem — seja descritivo.' },
+                    { frase: 'Branch organizada = time feliz.', subtitulo: 'Git flow, trunk based — escolha e siga.' },
+                    { frase: 'git revert é o perdão dos pecados.', subtitulo: 'Errou? git revert e segue o jogo.' }
+                ]),
+
+            // 6-10: FRONT-END
+            criarCarrossel('frontend', '🎨 HTML & CSS',
+                'esqueleto de site sendo vestido com CSS, pixels e estilos, design responsivo',
+                [
+                    { frase: 'HTML é a estrutura, CSS é a roupa.', subtitulo: 'Esqueleto e estilo — ambos importam.' },
+                    { frase: 'CSS não é difícil, é detalhe (e detalhes são o inferno).', subtitulo: 'Paciência e prática dominam.' },
+                    { frase: 'Flexbox salvou vidas (e casamentos).', subtitulo: 'Centralizar verticalmente deixou de ser pesadelo.' },
+                    { frase: 'Grid é poder — use com responsabilidade.', subtitulo: 'Layouts complexos ficaram simples.' },
+                    { frase: 'Responsividade é sobre se adaptar.', subtitulo: 'Seu layout precisa funcionar em qualquer tela.' }
+                ]),
+            criarCarrossel('frontend', '⚡ JavaScript',
+                'código JavaScript rodando, evento loop visualizado, call stack, closures',
+                [
+                    { frase: 'JavaScript é a língua franca da web.', subtitulo: 'Aprenda JS de verdade, o resto vem.' },
+                    { frase: 'Event Loop é mágica (compreensível).', subtitulo: 'Entenda como JS funciona de verdade.' },
+                    { frase: 'Closures são poderosas (e assustadoras no começo).', subtitulo: 'Domine escopo, domine JS.' },
+                    { frase: 'Assincronia é o superpoder do JS.', subtitulo: 'Promises, async/await — domine ou sofra.' },
+                    { frase: 'Vanilla JS ainda é rei.', subtitulo: 'Antes do framework, aprenda a linguagem.' }
+                ]),
+            criarCarrossel('frontend', '🔧 Frameworks',
+                'diferentes frameworks, escolha consciente, logos React, Vue, Angular',
+                [
+                    { frase: 'Framework é ferramenta, não religião.', subtitulo: 'Escolha o melhor para o problema.' },
+                    { frase: 'React, Vue, Angular — todos ensinam algo.', subtitulo: 'Conheça um, respeite os outros.' },
+                    { frase: 'Curva de aprendizado existe — persista.', subtitulo: 'Ninguém nasce sabendo framework.' },
+                    { frase: 'Documentação é seu melhor amigo.', subtitulo: 'RTFM — Read The F****** Manual.' },
+                    { frase: 'Comunidade faz o framework — participe.', subtitulo: 'Open source vive de contribuição.' }
+                ]),
+            criarCarrossel('frontend', '🚀 Performance',
+                'relâmpago, velocidade, carregamento rápido, métricas Core Web Vitals',
+                [
+                    { frase: 'Performance é feature — não negocie.', subtitulo: 'Usuário não espera — 3 segundos e foi.' },
+                    { frase: 'Core Web Vitals importam (pra caramba).', subtitulo: 'Google mede — seu tráfego depende.' },
+                    { frase: 'Imagem pesada = site lento.', subtitulo: 'Otimize imagens — sempre.' },
+                    { frase: 'Lazy loading não é preguiça — é estratégia.', subtitulo: 'Carregue só o que precisa, quando precisa.' },
+                    { frase: 'Bundle size importa — tree shake.', subtitulo: 'Código não usado é peso morto.' }
+                ]),
+            criarCarrossel('frontend', '♿ Acessibilidade',
+                'pessoas com deficiência usando a web, inclusão, contraste, leitor de tela',
+                [
+                    { frase: 'Acessibilidade não é feature — é direito.', subtitulo: 'Web para todos, sem exceção.' },
+                    { frase: 'Alt text descreve imagem — use.', subtitulo: 'Leitor de tela precisa entender.' },
+                    { frase: 'Contraste não é opcional — é legibilidade.', subtitulo: 'Texto escuro em fundo escuro? Não.' },
+                    { frase: 'Navegação por teclado é obrigatória.', subtitulo: 'Nem todo mundo usa mouse.' },
+                    { frase: 'ARIA labels salvam vidas digitais.', subtitulo: 'Use quando HTML não basta.' }
+                ]),
+
+            // 11-15: REACT
+            criarCarrossel('react', '🧩 Componentes',
+                'blocos de Lego formando UI, reutilização, componentes React',
+                [
+                    { frase: 'Componente é bloco de Lego — reutilize.', subtitulo: 'Escreva uma vez, use sempre.' },
+                    { frase: 'Props são parâmetros do sucesso.', subtitulo: 'Componente bem parametrizado é flexível.' },
+                    { frase: 'Componente puro é mais previsível.', subtitulo: 'Mesma props, mesmo resultado.' },
+                    { frase: 'Composição > Herança (sempre).', subtitulo: 'Combine componentes, não estenda.' },
+                    { frase: 'Key em listas não é opcional.', subtitulo: 'React precisa saber quem é quem.' }
+                ]),
+            criarCarrossel('react', '🎣 Hooks',
+                'hooks em ação, useState, useEffect, componentes funcionais',
+                [
+                    { frase: 'Hooks mudaram minha vida (e meu código).', subtitulo: 'useState, useEffect — ame-os.' },
+                    { frase: 'useState é coração do componente.', subtitulo: 'Estado local bem gerenciado.' },
+                    { frase: 'useEffect é ciclo de vida.', subtitulo: 'Monte, atualize, desmonte — com cuidado.' },
+                    { frase: 'useCallback memoiza funções.', subtitulo: 'Performance quando necessário.' },
+                    { frase: 'Custom hooks são superpoderes.', subtitulo: 'Crie seus próprios hooks — reutilize lógica.' }
+                ]),
+            criarCarrossel('react', '📊 Estado',
+                'balança comparando estado local e global, fluxo de dados, store',
+                [
+                    { frase: 'Estado local vs global — escolha bem.', subtitulo: 'Nem tudo precisa estar no Redux.' },
+                    { frase: 'Prop drilling é evil — use Context.', subtitulo: 'Passar props por 10 níveis? Não.' },
+                    { frase: 'Redux não é só estado — é padrão.', subtitulo: 'Aprender Redux ensina arquitetura.' },
+                    { frase: 'Zustand é alternativa leve.', subtitulo: 'Pequeno, rápido, eficiente.' },
+                    { frase: 'Imutabilidade é lei — não quebre.', subtitulo: 'Nunca mude estado diretamente.' }
+                ]),
+            criarCarrossel('react', '⚡ Performance React',
+                'React.memo, useMemo, otimização, renderização seletiva',
+                [
+                    { frase: 'React.memo evita re-renders.', subtitulo: 'Componente puro, menos renders.' },
+                    { frase: 'useMemo otimiza cálculo pesado.', subtitulo: 'Memoização é vida.' },
+                    { frase: 'Virtual DOM não é mágica — entenda.', subtitulo: 'Saber como funciona ajuda a otimizar.' },
+                    { frase: 'Code splitting = carregamento rápido.', subtitulo: 'Só carregue o que precisa agora.' },
+                    { frase: 'Bundle analyzer é seu amigo.', subtitulo: 'Veja o que está pesando.' }
+                ]),
+            criarCarrossel('react', '🌐 Ecossistema',
+                'Next.js logo, React Native, Vite, Tailwind, React Router',
+                [
+                    { frase: 'Next.js é React que virou adulto.', subtitulo: 'SSR, SSG, ISR — tudo junto.' },
+                    { frase: 'React Native, React que vira app.', subtitulo: 'Mobile com o que você já sabe.' },
+                    { frase: 'Vite é velocidade pura.', subtitulo: 'Build em segundos, dev em milissegundos.' },
+                    { frase: 'Tailwind + React = produtividade.', subtitulo: 'CSS sem sair do HTML.' },
+                    { frase: 'React Router te leva pra vaga.', subtitulo: 'Rotas bem definidas = app bem estruturado.' }
+                ]),
+
+            // 16-20: BACK-END
+            criarCarrossel('backend', '🔌 APIs',
+                'API documentation, requisições, integração, REST, GraphQL',
+                [
+                    { frase: 'API bem feita é ponte de sucesso.', subtitulo: 'Documentação clara, devs felizes.' },
+                    { frase: 'REST é padrão, GraphQL é evolução.', subtitulo: 'Cada um tem seu caso.' },
+                    { frase: 'Códigos de status falam — aprenda.', subtitulo: '200, 404, 500 — cada um tem seu lugar.' },
+                    { frase: 'Versionamento de API salva.', subtitulo: 'Não quebre quem usa.' },
+                    { frase: 'Rate limit protege seu backend.', subtitulo: 'Não deixe abusarem.' }
+                ]),
+            criarCarrossel('backend', '🗄️ Banco de dados',
+                'banco de dados, SQL, NoSQL, índices, tabelas',
+                [
+                    { frase: 'Banco de dados é coração do sistema.', subtitulo: 'Cuide bem.' },
+                    { frase: 'SQL é conversar com dados.', subtitulo: 'SELECT * FROM conhecimento.' },
+                    { frase: 'NoSQL é flexibilidade.', subtitulo: 'Escolha a ferramenta certa.' },
+                    { frase: 'Índices aceleram — use.', subtitulo: 'Sem índice, query lenta.' },
+                    { frase: 'Backup não é opcional.', subtitulo: 'Quando perder, vai querer ter.' }
+                ]),
+            criarCarrossel('backend', '🏗️ Arquitetura',
+                'microserviços vs monólito, message broker, cache, cloud',
+                [
+                    { frase: 'Microserviços escalam, monolito simplifica.', subtitulo: 'Arquitetura depende do contexto.' },
+                    { frase: 'Message broker desacopla.', subtitulo: 'RabbitMQ, Kafka — filas salvam.' },
+                    { frase: 'Cache acelera, memória é ouro.', subtitulo: 'Redis, Memcached.' },
+                    { frase: 'Serverless é foco no código.', subtitulo: 'Infra que você não gerencia.' },
+                    { frase: 'Cloud é escala infinita.', subtitulo: 'Pague pelo que usar.' }
+                ]),
+            criarCarrossel('backend', '🔒 Segurança',
+                'autenticação, login, JWT, HTTPS, cadeado, hash de senhas',
+                [
+                    { frase: 'Autenticação é segurança, não burocracia.', subtitulo: 'Proteja seus usuários.' },
+                    { frase: 'JWT é identidade, session é estado.', subtitulo: 'Escolha a estratégia certa.' },
+                    { frase: 'HTTPS não é opcional — é obrigatório.', subtitulo: 'Sem HTTPS, sem credibilidade.' },
+                    { frase: 'SQL injection mata — previna.', subtitulo: 'ORM ajuda, mas não resolve tudo.' },
+                    { frase: 'Senhas: hash + salt, sempre.', subtitulo: 'Nunca guarde texto puro.' }
+                ]),
+            criarCarrossel('backend', '⚙️ DevOps',
+                'DevOps cultura, Docker, Kubernetes, IaC, monitoramento',
+                [
+                    { frase: 'DevOps é cultura, não ferramenta.', subtitulo: 'Todo mundo é responsável.' },
+                    { frase: 'Docker encapsula, Kubernetes orquestra.', subtitulo: 'Container é leve, cluster é poder.' },
+                    { frase: 'IaC é infra como código.', subtitulo: 'Versionar servidor é tão importante.' },
+                    { frase: 'Monitoramento é visibilidade.', subtitulo: 'Veja o que acontece.' },
+                    { frase: 'Logs são memória do sistema.', subtitulo: 'Quando quebra, é onde olha.' }
+                ]),
+
+            // 21-25: GITHUB
+            criarCarrossel('github', '👤 Perfil',
+                'perfil do GitHub, contribuições verdes, gráfico, README',
+                [
+                    { frase: 'GitHub é seu currículo vivo.', subtitulo: 'Recrutador olha antes do LinkedIn.' },
+                    { frase: 'README do perfil é carta de apresentação.', subtitulo: 'Capriche na primeira impressão.' },
+                    { frase: 'Contribuição todo dia faz diferença.', subtitulo: 'Verde consistente impressiona.' },
+                    { frase: 'Seus repositórios falam por você.', subtitulo: 'Código limpo = profissional confiável.' },
+                    { frase: 'Star em projeto é like em dev.', subtitulo: 'Reconheça trabalho alheio.' }
+                ]),
+            criarCarrossel('github', '📦 Repositórios',
+                'README bem formatado, emblemas, licenças, .gitignore',
+                [
+                    { frase: 'README bonito é portfólio que vende.', subtitulo: 'Documente como se fosse para seu chefe.' },
+                    { frase: 'Licença importa — escolha a certa.', subtitulo: 'Código sem licença = ninguém usa.' },
+                    { frase: '.gitignore protege segredos.', subtitulo: 'Nunca suba .env.' },
+                    { frase: 'Issues são oportunidades de ajudar.', subtitulo: 'Resolva problemas, ganhe experiência.' },
+                    { frase: 'Wiki é documentação viva.', subtitulo: 'Mantenha atualizada.' }
+                ]),
+            criarCarrossel('github', '🤝 Colaboração',
+                'pull request sendo revisado, code review, fork, clone',
+                [
+                    { frase: 'Pull request é colaboração, não competição.', subtitulo: 'Code review é presente.' },
+                    { frase: 'Code review construtivo ensina.', subtitulo: 'Aprenda a dar e receber.' },
+                    { frase: 'Fork é criar a partir do outro.', subtitulo: 'Inspire-se, adapte, melhore.' },
+                    { frase: 'Clone é trazer pra perto.', subtitulo: 'Colabore localmente.' },
+                    { frase: 'Open source é o MBA que não tem preço.', subtitulo: 'Contribuir ensina mais que curso.' }
+                ]),
+            criarCarrossel('github', '🔧 Git avançado',
+                'branch strategy, rebase vs merge, git stash, git revert',
+                [
+                    { frase: 'Branch organizada = time feliz.', subtitulo: 'Git flow, trunk based — escolha.' },
+                    { frase: 'Mensagem de commit conta história.', subtitulo: '“fix” não é mensagem.' },
+                    { frase: 'Rebase vs merge — saiba a diferença.', subtitulo: 'Cada um tem seu lugar.' },
+                    { frase: 'git stash salva vidas.', subtitulo: 'Mudança não commitada? stash.' },
+                    { frase: 'git revert é perdão dos pecados.', subtitulo: 'Errou? git revert e segue.' }
+                ]),
+            criarCarrossel('github', '⚙️ Automação',
+                'GitHub Actions rodando, CI/CD, deploy automático, badges',
+                [
+                    { frase: 'GitHub Actions automatiza tudo.', subtitulo: 'CI/CD é modernidade.' },
+                    { frase: 'Deploy automático = paz.', subtitulo: 'Push na main sobe sozinho.' },
+                    { frase: 'Testes automáticos salvam.', subtitulo: 'Rode antes de merge.' },
+                    { frase: 'Pages é site grátis.', subtitulo: 'Portfólio sem custo.' },
+                    { frase: 'Badges mostram status do projeto.', subtitulo: 'Passing, failing — transparência.' }
+                ]),
+
+            // 26-30: IA
+            criarCarrossel('ia', '💻 IA no dia a dia',
+                'copilot sugerindo código, dev revisando, parceria humano-máquina',
+                [
+                    { frase: 'Copilot não pensa por você — ele só digita mais rápido.', subtitulo: 'A lógica ainda é sua.' },
+                    { frase: 'ChatGPT é ótimo, mas não confie cegamente.', subtitulo: 'Confira, verifique, teste.' },
+                    { frase: 'Engenharia de prompt é o novo inglês.', subtitulo: 'Saber perguntar é a nova skill.' },
+                    { frase: 'IA acelera, você entrega.', subtitulo: 'Mais rápido, mas não mais descuidado.' },
+                    { frase: 'Stack Overflow + ChatGPT = dev completo.', subtitulo: 'Use todas as ferramentas.' }
+                ]),
+            criarCarrossel('ia', '🛠️ Ferramentas',
+                'diferentes IAs, comparação, fine tuning, embeddings, RAG',
+                [
+                    { frase: 'Midjourney cria, você implementa.', subtitulo: 'Design com IA é parceria.' },
+                    { frase: 'Claude, GPT, Gemini — cada um tem seu forte.', subtitulo: 'Escolha a ferramenta certa.' },
+                    { frase: 'Fine tuning é personalização.', subtitulo: 'Modelo sob medida para seu problema.' },
+                    { frase: 'Embeddings são a nova linguagem.', subtitulo: 'Vetores que representam significado.' },
+                    { frase: 'RAG: contexto sem retreinar.', subtitulo: 'Busca + IA = precisão.' }
+                ]),
+            criarCarrossel('ia', '🤖 Fundamentos',
+                'fórmulas matemáticas, dados, algoritmos, estatística',
+                [
+                    { frase: 'IA não é magia — é matemática.', subtitulo: 'Estatística + computação = IA.' },
+                    { frase: 'Machine learning é estatística que aprende.', subtitulo: 'Dados entram, modelo sai.' },
+                    { frase: 'Dados de qualidade = modelo inteligente.', subtitulo: 'Garbage in, garbage out — sempre.' },
+                    { frase: 'Overfitting é decorar, não aprender.', subtitulo: 'Seu modelo precisa generalizar.' },
+                    { frase: 'Underfitting é preguiça do modelo.', subtitulo: 'Dê mais dados ou melhore features.' }
+                ]),
+            criarCarrossel('ia', '⚖️ Ética',
+                'balança da justiça, dados tendenciosos, privacidade, responsabilidade',
+                [
+                    { frase: 'IA com viés é perigosa — cuidado.', subtitulo: 'Dados tendenciosos = modelo preconceituoso.' },
+                    { frase: 'Transparência importa — explique seu modelo.', subtitulo: 'Caixa preta não é aceitável.' },
+                    { frase: 'Privacidade não é opcional.', subtitulo: 'Dados do usuário merecem respeito.' },
+                    { frase: 'IA substitui tarefas, não pessoas.', subtitulo: 'Ferramenta nas mãos certas.' },
+                    { frase: 'Responsabilidade é sua, não da IA.', subtitulo: 'Você responde pelo que a IA gera.' }
+                ]),
+            criarCarrossel('ia', '🔮 Futuro',
+                'humano e robô trabalhando juntos, colaboração, ferramentas',
+                [
+                    { frase: 'O dev do futuro é um curador de IA.', subtitulo: 'Escolher o que usar é o diferencial.' },
+                    { frase: 'IA não vai te substituir, mas um dev com IA vai.', subtitulo: 'Adapte-se ou fique para trás.' },
+                    { frase: 'Aprender a aprender com IA é nova skill.', subtitulo: 'Ensine a IA a te ensinar.' },
+                    { frase: 'O futuro é colaboração humano-IA.', subtitulo: 'Juntos somos mais fortes.' },
+                    { frase: 'IA é ferramenta, não substituta.', subtitulo: 'Martelo não constrói casa sozinho.' }
+                ]),
+
+            // 31-35: CARREIRA
+            criarCarrossel('carreira', '🚀 Começando',
+                'dev iniciante fazendo primeiro commit, tela brilhando, setup simples',
+                [
+                    { frase: 'O primeiro commit é o mais difícil (depois vem o vício).', subtitulo: 'Todo mundo começa do zero — inclusive você.' },
+                    { frase: 'Júnior não é quem não sabe, é quem está aprendendo (e tudo bem).', subtitulo: 'Todo sênior já foi júnior — lembre disso.' },
+                    { frase: 'Seu primeiro portfólio não precisa ser perfeito, precisa existir.', subtitulo: 'Feito é melhor que perfeito — comece.' },
+                    { frase: 'Errar no início é esperado, desistir é opcional.', subtitulo: 'Bug não é fracasso — é aprendizado compilado.' },
+                    { frase: 'Você não precisa saber tudo, precisa saber aprender.', subtitulo: 'Aprender a aprender é a habilidade mais importante.' }
+                ]),
+            criarCarrossel('carreira', '📈 Crescimento',
+                'dev sendo promovido, celebração, reconhecimento, time feliz',
+                [
+                    { frase: 'Promoção não cai do céu, cai de código entregue.', subtitulo: 'Resultado fala mais alto que horas trabalhadas.' },
+                    { frase: 'Seu salário é reflexo dos problemas que você resolve.', subtitulo: 'Quanto maior o problema, maior a recompensa.' },
+                    { frase: 'Pleno é quem entrega sem precisar de supervisão.', subtitulo: 'Autonomia é o marco da senioridade.' },
+                    { frase: 'Sênior é quem ensina enquanto entrega.', subtitulo: 'Compartilhar conhecimento multiplica impacto.' },
+                    { frase: 'Tech Lead não é quem mais codifica, é quem mais facilita.', subtitulo: 'Liderança técnica é sobre pessoas, não código.' }
+                ]),
+            criarCarrossel('carreira', '💼 Mercado',
+                'entrevista técnica, perfil do LinkedIn otimizado, network',
+                [
+                    { frase: 'Entrevista técnica é via de mão dupla (você também escolhe).', subtitulo: 'Não é só eles te avaliarem — avalie a empresa também.' },
+                    { frase: 'Seu LinkedIn é seu outdoor 24/7 — mantenha atualizado.', subtitulo: 'Recrutador pesquisa antes de chamar.' },
+                    { frase: 'Network não é só coletar contatos, é cultivar relações.', subtitulo: 'Conexão verdadeira abre portas que currículo não abre.' },
+                    { frase: 'Salário não é tudo, mas também não é nada (negocie).', subtitulo: 'Conheça seu valor e peça o justo.' },
+                    { frase: 'CLT vs PJ vs gringa: escolha seu estilo de vida.', subtitulo: 'Não existe certo ou errado, existe o que cabe em você.' }
+                ]),
+            criarCarrossel('carreira', '⚡ Desafios',
+                'dev descansando, equilíbrio, síndrome do impostor, superação',
+                [
+                    { frase: 'Burnout não é badge de honra — descanse.', subtitulo: 'Trabalhar 12h por dia não te faz melhor.' },
+                    { frase: 'Síndrome do impostor ataca todo mundo (até sênior).', subtitulo: 'Você não é o único que se sente assim.' },
+                    { frase: 'Frustração faz parte — respire e continue.', subtitulo: 'Bug não resolve na base da raiva — pausa ajuda.' },
+                    { frase: 'Comparação com os outros é o ladrão da alegria.', subtitulo: 'Sua jornada é única — foque nela.' },
+                    { frase: 'Pedir ajuda não é fraqueza — é inteligência.', subtitulo: 'Ninguém constrói nada sozinho.' }
+                ]),
+            criarCarrossel('carreira', '🎯 Planejamento',
+                'mapa de carreira, metas, consistência, side project',
+                [
+                    { frase: 'Plano de carreira é mapa, não GPS (pode mudar).', subtitulo: 'Tenha direção, mas seja flexível.' },
+                    { frase: 'Objetivo anual, metas mensais, ação diária.', subtitulo: 'Grande objetivo se constrói todo dia.' },
+                    { frase: 'Estudar todo dia 1h > estudar 7h no domingo.', subtitulo: 'Consistência supera intensidade.' },
+                    { frase: 'Side project não é opcional — é diferencial.', subtitulo: 'Projeto próprio mostra paixão e proatividade.' },
+                    { frase: 'Sua carreira é sua, não da empresa — assuma o controle.', subtitulo: 'Você é o CEO da sua própria carreira.' }
+                ]),
+
+            // 36-40: SOFT SKILLS
+            criarCarrossel('softskills', '🗣️ Comunicação',
+                'pessoas conversando, diálogo aberto, troca de ideias',
+                [
+                    { frase: 'Comunicação é tão importante quanto código.', subtitulo: 'Explique suas decisões.' },
+                    { frase: 'Saber ouvir é habilidade rara.', subtitulo: 'Escute antes de falar.' },
+                    { frase: 'Reunião produtiva tem pauta.', subtitulo: 'Sem pauta, sem reunião.' },
+                    { frase: 'Feedback é presente, não crítica.', subtitulo: 'Dê e receba bem.' },
+                    { frase: 'Comunique problemas cedo.', subtitulo: 'Esconder só piora.' }
+                ]),
+            criarCarrossel('softskills', '👥 Trabalho em equipe',
+                'equipe unida, colaborando, ajuda mútua, diversidade',
+                [
+                    { frase: 'Sozinho vai mais rápido, junto vai mais longe.', subtitulo: 'Time vence individual.' },
+                    { frase: 'Conflitos acontecem — resolva com respeito.', subtitulo: 'Diferentes opiniões, mesmo objetivo.' },
+                    { frase: 'Celebre vitórias do time.', subtitulo: 'Sucesso coletivo é melhor.' },
+                    { frase: 'Apoie colegas em dificuldade.', subtitulo: 'Hoje por eles, amanhã por você.' },
+                    { frase: 'Diversidade fortalece o time.', subtitulo: 'Diferentes perspectivas = melhores soluções.' }
+                ]),
+            criarCarrossel('softskills', '👑 Liderança',
+                'líder ajudando o time, inspiração, delegação, reconhecimento',
+                [
+                    { frase: 'Liderança não é cargo — é atitude.', subtitulo: 'Inspire onde estiver.' },
+                    { frase: 'Líder serve o time, não o contrário.', subtitulo: 'Servant leadership.' },
+                    { frase: 'Delegar não é fugir — é confiar.', subtitulo: 'Confie no seu time.' },
+                    { frase: 'Reconheça o bom trabalho.', subtitulo: 'Elogio público motiva.' },
+                    { frase: 'Seja exemplo, não só chefe.', subtitulo: 'Atitudes falam mais.' }
+                ]),
+            criarCarrossel('softskills', '🧠 Inteligência emocional',
+                'calma, respiração, autoconhecimento, empatia, resiliência',
+                [
+                    { frase: 'Respire antes de reagir.', subtitulo: 'Calma resolve mais que pressa.' },
+                    { frase: 'Frustração faz parte — gerencie.', subtitulo: 'Bug não resolve na raiva.' },
+                    { frase: 'Autoconhecimento é superpoder.', subtitulo: 'Saiba seus pontos fortes.' },
+                    { frase: 'Empatia com colega faz diferença.', subtitulo: 'Todo mundo tem dias ruins.' },
+                    { frase: 'Resiliência é aprender com queda.', subtitulo: 'Cair, levantar, seguir.' }
+                ]),
+            criarCarrossel('softskills', '⚡ Produtividade',
+                'técnica pomodoro, matriz de prioridades, foco, organização',
+                [
+                    { frase: 'Pomodoro > 8h diretas.', subtitulo: 'Foco + pausa = resultado.' },
+                    { frase: 'Priorize: importante vs urgente.', subtitulo: 'Matriz Eisenhower salva.' },
+                    { frase: 'Multitarefa é mito — foque.', subtitulo: 'Uma coisa de cada vez.' },
+                    { frase: 'Descanse — burnout não é badge.', subtitulo: 'Produtivo descansa.' },
+                    { frase: 'Planejamento evita correria.', subtitulo: 'Organize-se para entregar.' }
+                ]),
+
+            // 41-45: DESIGN
+            criarCarrossel('design', '🎯 Fundamentos',
+                'problema sendo resolvido pelo design, hierarquia visual, contraste',
+                [
+                    { frase: 'Design é resolver problemas, não só embelezar.', subtitulo: 'Forma segue função — sempre.' },
+                    { frase: 'Hierarquia visual guia o olhar.', subtitulo: 'O que é mais importante? Mostre.' },
+                    { frase: 'Contraste não é opcional — é legibilidade.', subtitulo: 'Texto tem que ser lido.' },
+                    { frase: 'Espaço em branco é respiro.', subtitulo: 'Menos poluição, mais foco.' },
+                    { frase: 'Consistência cria confiança.', subtitulo: 'Padrões são seus amigos.' }
+                ]),
+            criarCarrossel('design', '🖌️ UI Design',
+                'interface bonita, psicologia das cores, tipografia, microinterações',
+                [
+                    { frase: 'UI é a roupa do produto.', subtitulo: 'Primeira impressão importa.' },
+                    { frase: 'Cores comunicam antes das palavras.', subtitulo: 'Psicologia das cores não é mimimi.' },
+                    { frase: 'Tipografia é a voz do design.', subtitulo: 'Escolha bem suas fontes.' },
+                    { frase: 'Pixel perfeito é estado de espírito.', subtitulo: 'Detalhe faz diferença.' },
+                    { frase: 'Microinterações criam conexão.', subtitulo: 'Pequenos detalhes encantam.' }
+                ]),
+            criarCarrossel('design', '🧭 UX Design',
+                'ponte conectando usuário à tecnologia, padrões de leitura, feedback',
+                [
+                    { frase: 'UX é a ponte entre usuário e tecnologia.', subtitulo: 'Seu avô precisa entender também.' },
+                    { frase: 'Usuário não lê — ele escaneia.', subtitulo: 'Padrão F, padrão Z — conheça.' },
+                    { frase: 'Feedback do usuário é o norte.', subtitulo: 'Ouça quem usa.' },
+                    { frase: 'Jornada do usuário é um mapa.', subtitulo: 'Entenda cada passo.' },
+                    { frase: 'Teste com usuário — sempre.', subtitulo: 'Você não é seu usuário.' }
+                ]),
+            criarCarrossel('design', '📚 Design System',
+                'design system documentado, componentes, tokens, documentação',
+                [
+                    { frase: 'Design system é consistência em escala.', subtitulo: 'Time grande, padrão único.' },
+                    { frase: 'Componentes reutilizáveis salvam.', subtitulo: 'Não reinvente a roda.' },
+                    { frase: 'Tokens de design são a base.', subtitulo: 'Cores, espaçamentos, tipografia.' },
+                    { frase: 'Documentação é lei — siga.', subtitulo: 'Time alinhado = produto consistente.' },
+                    { frase: 'Evolua o sistema, não quebre.', subtitulo: 'Mudanças graduais, não revoluções.' }
+                ]),
+            criarCarrossel('design', '🔧 Ferramentas',
+                'Figma aberto, wireframe evoluindo para protótipo, designer e dev conversando',
+                [
+                    { frase: 'Figma é o novo Photoshop (e melhor).', subtitulo: 'Colaboração em tempo real.' },
+                    { frase: 'Wireframe é esqueleto, protótipo é pele.', subtitulo: 'Valide antes de investir.' },
+                    { frase: 'Design e dev precisam conversar.', subtitulo: 'Handoff sem atrito.' },
+                    { frase: 'Iteração é caminho para perfeição.', subtitulo: 'Nunca fica pronto, sempre melhora.' },
+                    { frase: 'Inspiração não cai do céu — busque.', subtitulo: 'Referências são combustível.' }
+                ]),
+
+            // 46-50: DADOS
+            criarCarrossel('dados', '📊 Fundamentos',
+                'dados brutos sendo refinados, qualidade de dados, outliers',
+                [
+                    { frase: 'Dado é o novo petróleo — refine.', subtitulo: 'Coletar é fácil, extrair valor é skill.' },
+                    { frase: 'Qualidade do dado define tudo.', subtitulo: 'Garbage in, garbage out.' },
+                    { frase: 'Correlação não é causalidade.', subtitulo: 'Nem tudo é o que parece.' },
+                    { frase: 'Outlier é erro ou oportunidade.', subtitulo: 'Investigue antes de ignorar.' },
+                    { frase: 'Dado sem contexto é número perdido.', subtitulo: 'Conte a história completa.' }
+                ]),
+            criarCarrossel('dados', '📈 Análise',
+                'dashboard analytics, KPIs, A/B testing, data driven',
+                [
+                    { frase: 'Analytics entende usuário.', subtitulo: 'Números contam histórias.' },
+                    { frase: 'Métrica certa, decisão certa.', subtitulo: 'KPI errado leva ao caminho errado.' },
+                    { frase: 'A/B testing otimiza conversão.', subtitulo: 'Deixe os dados decidirem.' },
+                    { frase: 'Dashboard é visão 360.', subtitulo: 'O que não é medido não é gerenciado.' },
+                    { frase: 'Data driven é cultura.', subtitulo: 'Achismo vs evidência.' }
+                ]),
+            criarCarrossel('dados', '📉 Visualização',
+                'visualização de dados, gráficos variados, storytelling com dados',
+                [
+                    { frase: 'Visualização conta história.', subtitulo: 'Gráfico vale mais que tabela.' },
+                    { frase: 'Gráfico certo, insight na hora.', subtitulo: 'Escolha a visualização certa.' },
+                    { frase: 'Storytelling com dados.', subtitulo: 'Comunique com clareza.' },
+                    { frase: 'Cores em gráficos importam.', subtitulo: 'Não confunda o usuário.' },
+                    { frase: 'Simplicidade em visualização vence.', subtitulo: 'Menos é mais.' }
+                ]),
+            criarCarrossel('dados', '🌊 Big Data',
+                'big data, insights, pipeline de dados, cluster, data lake',
+                [
+                    { frase: 'Big data é volume, insight é valor.', subtitulo: 'Não adianta ter e não usar.' },
+                    { frase: 'Data pipeline é o escoamento.', subtitulo: 'Do dado bruto ao insight.' },
+                    { frase: 'Escala horizontal é o caminho.', subtitulo: 'Mais máquinas, não mais poder.' },
+                    { frase: 'Batch vs stream — quando usar.', subtitulo: 'Tempo real nem sempre é necessário.' },
+                    { frase: 'Data lake é oceano de dados.', subtitulo: 'Tudo guardado, tudo disponível.' }
+                ]),
+            criarCarrossel('dados', '🔒 Ética em dados',
+                'privacidade, proteção, anonimização, viés, transparência',
+                [
+                    { frase: 'Privacidade é direito — respeite.', subtitulo: 'LGPD não é brincadeira.' },
+                    { frase: 'Anonimização não é opcional.', subtitulo: 'Proteja dados sensíveis.' },
+                    { frase: 'Viés em dados é perigoso.', subtitulo: 'Dados tendenciosos = decisões erradas.' },
+                    { frase: 'Transparência gera confiança.', subtitulo: 'Explique como usa dados.' },
+                    { frase: 'Dado com propósito transforma.', subtitulo: 'Use para o bem.' }
+                ]),
+
+            // 51-55: INOVAÇÃO
+            criarCarrossel('inovacao', '💡 Mindset',
+                'inovação, evolução, questionamento, curiosidade',
+                [
+                    { frase: 'Inovação é necessidade, não luxo.', subtitulo: 'Evoluir ou ficar para trás.' },
+                    { frase: 'Questionar o status quo é o primeiro passo.', subtitulo: 'Por que sempre foi assim?' },
+                    { frase: 'Errar rápido, aprender rápido.', subtitulo: 'Falha é dado para acertar.' },
+                    { frase: 'Curiosidade move a inovação.', subtitulo: 'Pergunte “e se...”' },
+                    { frase: 'Inovação não tem idade.', subtitulo: 'Comece agora.' }
+                ]),
+            criarCarrossel('inovacao', '🎨 Processo criativo',
+                'inspiração, brainstorming, protótipo rápido, feedback',
+                [
+                    { frase: 'Inspiração existe — mas busque.', subtitulo: 'Não espere cair do céu.' },
+                    { frase: 'Brainstorm sem julgamento primeiro.', subtitulo: 'Toda ideia é bem-vinda.' },
+                    { frase: 'Prototipe rápido, valide cedo.', subtitulo: 'Mão na massa logo.' },
+                    { frase: 'Feedback é combustível da inovação.', subtitulo: 'Mostre, receba, melhore.' },
+                    { frase: 'Iteração leva à perfeição.', subtitulo: 'Nunca fica pronto, sempre melhora.' }
+                ]),
+            criarCarrossel('inovacao', '🚀 Tecnologias emergentes',
+                'IA generativa, blockchain, IoT, edge computing, Web3',
+                [
+                    { frase: 'IA generativa mudou o jogo.', subtitulo: 'Acompanhe ou fique.' },
+                    { frase: 'Blockchain vai além de cripto.', subtitulo: 'Descentralização é o futuro.' },
+                    { frase: 'IoT conecta o mundo físico.', subtitulo: 'Coisas que falam.' },
+                    { frase: 'Edge computing é o novo cloud.', subtitulo: 'Processamento perto do usuário.' },
+                    { frase: 'Web3 ainda está começando.', subtitulo: 'Acompanhe de perto.' }
+                ]),
+            criarCarrossel('inovacao', '🔧 Inovação na prática',
+                'hackathon, side project evoluindo, open source, solução simples',
+                [
+                    { frase: 'Hackathon gera inovação.', subtitulo: '24h, café, código.' },
+                    { frase: 'Side project vira startup.', subtitulo: 'Histórias que começam assim.' },
+                    { frase: 'Open source acelera inovação.', subtitulo: 'Construir junto é mais rápido.' },
+                    { frase: 'Inovação não precisa ser complexa.', subtitulo: 'Simples que resolve.' },
+                    { frase: 'Tecnologia com propósito transforma.', subtitulo: 'Impacto real.' }
+                ]),
+            criarCarrossel('inovacao', '🔮 Futuro',
+                'futuro digital e humano, legado, evolução contínua',
+                [
+                    { frase: 'O futuro é digital, mas humano.', subtitulo: 'Tecnologia com propósito.' },
+                    { frase: 'Construa seu legado.', subtitulo: 'Marcas que ficam.' },
+                    { frase: 'Você não sabe quem está te observando.', subtitulo: 'Inspiração em ação.' },
+                    { frase: 'O melhor código ainda está por vir.', subtitulo: 'Futuro em construção.' },
+                    { frase: 'Continue inovando, continue evoluindo.', subtitulo: 'Não pare.' }
+                ]),
+
+            // 56-60: CURTAS
+            criarCarrossel('curtas', '🧹 Código limpo',
+                'poucas linhas, muito resultado, clean code, simplicidade',
+                [
+                    { frase: 'Menos código, mais solução.', subtitulo: 'Quantidade não é qualidade.' },
+                    { frase: 'Legível > Inteligente.', subtitulo: 'Código claro é código mantível.' },
+                    { frase: 'Código limpo sempre vence.', subtitulo: 'Qualidade acima de quantidade.' },
+                    { frase: 'Simplicidade é poder.', subtitulo: 'Complexidade é inimiga.' },
+                    { frase: 'Refatorar é preciso.', subtitulo: 'Evolução contínua.' }
+                ]),
+            criarCarrossel('curtas', '🐛 Debug',
+                'bug, humor, pressa, mensagem de erro, console.log',
+                [
+                    { frase: 'Bug é feature não documentada.', subtitulo: 'Ou só um erro mesmo.' },
+                    { frase: 'Apressado come bug.', subtitulo: 'Pressa é inimiga da qualidade.' },
+                    { frase: 'Console.log salva.', subtitulo: 'Debug simples e eficaz.' },
+                    { frase: 'O erro está entre a cadeira e o teclado.', subtitulo: 'PEBCAK clássico.' },
+                    { frase: 'Leia o erro antes de agir.', subtitulo: 'A mensagem está ali por um motivo.' }
+                ]),
+            criarCarrossel('curtas', '⚡ Produtividade',
+                'foco, consistência, paz, pensamento profundo, mente sã',
+                [
+                    { frase: 'Foco é tudo.', subtitulo: 'Sem distração, sem erro.' },
+                    { frase: 'Consistência vence.', subtitulo: 'Pequeno todo dia.' },
+                    { frase: 'Menos ansiedade, mais entrega.', subtitulo: 'Planejamento traz paz.' },
+                    { frase: 'Pensar > Digitar.', subtitulo: 'Raciocínio vale ouro.' },
+                    { frase: 'Código limpo, mente sã.', subtitulo: 'Organização mental.' }
+                ]),
+            criarCarrossel('curtas', '🤔 Filosofia dev',
+                'problemas sendo resolvidos, código poético, documentação, testes',
+                [
+                    { frase: 'Programar é resolver problemas.', subtitulo: 'Computador só executa.' },
+                    { frase: 'Código é poesia em lógica.', subtitulo: 'Elegância também importa.' },
+                    { frase: 'Documentação é amor ao próximo.', subtitulo: 'Inclusive ao seu eu do futuro.' },
+                    { frase: 'Teste é segurança, não burocracia.', subtitulo: 'Dormir tranquilo.' },
+                    { frase: 'Código é contrato.', subtitulo: 'Compromisso com a qualidade.' }
+                ]),
+            criarCarrossel('curtas', '🌟 Carreira e vida',
+                'controle da carreira, aprendizado contínuo, compartilhamento, celebração',
+                [
+                    { frase: 'Sua carreira é sua.', subtitulo: 'Assuma o controle.' },
+                    { frase: 'Aprenda sempre.', subtitulo: 'Nunca sabe tudo.' },
+                    { frase: 'Compartilhe conhecimento.', subtitulo: 'Ele volta.' },
+                    { frase: 'Celebre pequenas vitórias.', subtitulo: 'Cada commit conta.' },
+                    { frase: 'Continue codando.', subtitulo: 'O melhor ainda vem.' }
+                ])
         ];
 
+        // Garantir 60 carrosséis exatos
+        const CARROSSEIS_TOTAIS = carrosseisDatabase.slice(0, 60);
+
+        // ==================== HASHTAGS ====================
         const hashtagsTemas = {
             carreira: ["#CarreiraTech", "#DesenvolvimentoProfissional", "#DevLife", "#Programador", "#Tecnologia", "#MercadoTech", "#CrescimentoProfissional", "#Networking", "#Mentoria", "#SucessoProfissional", "#HumildadeTech", "#AprendizadoContínuo", "#PlanoDeCarreira", "#EvoluçãoProfissional"],
             programacao: ["#Programacao", "#DevTips", "#CodigoLimpo", "#CleanCode", "#LogicaDeProgramacao", "#Algoritmos", "#EstruturaDeDados", "#Programador", "#Coding", "#SoftwareDevelopment", "#DebuggingLife", "#BugHunter", "#TestesAutomatizados", "#Git"],
@@ -1010,13 +1153,11 @@
             curtas: ["#DevLife", "#Programador", "#Coding", "#TechTips", "#Code", "#Developer", "#SoftwareEngineer", "#ProgrammerHumor", "#DevCommunity", "#100DaysOfCode", "#CodeNewbie", "#TechHumor", "#FrasesDeDev", "#MotivacaoDev"]
         };
 
-        let promptsUsados = [];
-        let ultimoPrompt = null;
+        // ==================== LÓGICA PRINCIPAL ====================
+        let carrosseisUsados = [];
+        let ultimoCarrossel = null;
         let promptOriginal = null;
         let contadorGeracoes = 0;
-        let categoriaAtual = '';
-        let grupoAtual = '';
-        let sequenciaAtual = 0;
 
         const gerarBtn = document.getElementById('gerarBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -1028,7 +1169,7 @@
         const progressoGrupoSpan = document.getElementById('progressoGrupo');
         const promptIADiv = document.getElementById('promptIA');
         const editorPrompt = document.getElementById('editorPrompt');
-        const frasePostDiv = document.getElementById('frasePost');
+        const textoCarrosselDiv = document.getElementById('textoCarrossel');
         const hashtagsListaDiv = document.getElementById('hashtagsLista');
         const copiarPromptBtn = document.getElementById('copiarPromptBtn');
         const copiarFraseBtn = document.getElementById('copiarFraseBtn');
@@ -1043,16 +1184,6 @@
             toast.textContent = mensagem;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
-        }
-
-        function atualizarInfoGrupo(prompt) {
-            categoriaAtual = obterNomeCategoria(prompt.tema);
-            grupoAtual = prompt.grupo;
-            sequenciaAtual = prompt.sequencia;
-
-            categoriaAtualSpan.textContent = categoriaAtual;
-            grupoAtualSpan.textContent = prompt.grupo;
-            progressoGrupoSpan.textContent = `Post ${prompt.sequencia}/${prompt.totalGrupo}`;
         }
 
         function obterNomeCategoria(tema) {
@@ -1083,91 +1214,48 @@
             return formatos[formato] || '1080x1350';
         }
 
-        function gerarPromptUnico() {
+        function gerarCarrosselUnico() {
             gerarBtn.classList.add('loading');
 
             setTimeout(() => {
                 const filtroCategoria = document.getElementById('filtroCategoria').value;
 
-                let promptsDisponiveis = promptsDatabase;
+                let disponiveis = CARROSSEIS_TOTAIS;
                 if (filtroCategoria !== 'todas') {
-                    promptsDisponiveis = promptsDatabase.filter(p => p.tema === filtroCategoria);
+                    disponiveis = CARROSSEIS_TOTAIS.filter(c => c.tema === filtroCategoria);
                 }
 
-                if (promptsDisponiveis.length === 0) {
-                    mostrarToast('❌ Nenhum prompt disponível para esta categoria');
+                if (disponiveis.length === 0) {
+                    mostrarToast('❌ Nenhum carrossel disponível para esta categoria');
                     gerarBtn.classList.remove('loading');
                     return;
                 }
 
-                let promptEscolhido = null;
+                const naoUsados = disponiveis.filter((_, idx) => !carrosseisUsados.includes(idx));
 
-                const ultimoPromptDoGrupo = promptsUsados.length > 0
-                    ? promptsDatabase[promptsUsados[promptsUsados.length - 1]]
-                    : null;
-
-                if (ultimoPromptDoGrupo) {
-                    const promptsDoGrupo = promptsDisponiveis.filter(p =>
-                        p.tema === ultimoPromptDoGrupo.tema &&
-                        p.grupo === ultimoPromptDoGrupo.grupo
-                    );
-
-                    const proximaSequencia = ultimoPromptDoGrupo.sequencia + 1;
-
-                    promptEscolhido = promptsDoGrupo.find(p =>
-                        p.sequencia === proximaSequencia &&
-                        !promptsUsados.includes(promptsDatabase.indexOf(p))
-                    );
+                if (naoUsados.length === 0) {
+                    mostrarToast('🎉 Parabéns! Você usou todos os 60 carrosséis!');
+                    gerarBtn.classList.remove('loading');
+                    return;
                 }
 
-                if (!promptEscolhido) {
-                    const gruposDisponiveis = {};
+                const escolhido = naoUsados[Math.floor(Math.random() * naoUsados.length)];
+                const indiceEscolhido = CARROSSEIS_TOTAIS.findIndex(c => c === escolhido);
 
-                    promptsDisponiveis.forEach((p, index) => {
-                        if (!promptsUsados.includes(index)) {
-                            const chave = `${p.tema}|${p.grupo}`;
-                            if (!gruposDisponiveis[chave]) {
-                                gruposDisponiveis[chave] = [];
-                            }
-                            gruposDisponiveis[chave].push(p);
-                        }
-                    });
-
-                    const chavesGrupos = Object.keys(gruposDisponiveis);
-
-                    if (chavesGrupos.length === 0) {
-                        mostrarToast('🎉 Parabéns! Você usou todos os 300 prompts!');
-                        gerarBtn.classList.remove('loading');
-                        return;
-                    }
-
-                    const chaveEscolhida = chavesGrupos[Math.floor(Math.random() * chavesGrupos.length)];
-                    const promptsDoGrupo = gruposDisponiveis[chaveEscolhida];
-
-                    promptsDoGrupo.sort((a, b) => a.sequencia - b.sequencia);
-
-                    promptEscolhido = promptsDoGrupo[0];
-                }
-
-                const indiceEscolhido = promptsDatabase.findIndex(p =>
-                    p.tema === promptEscolhido.tema &&
-                    p.grupo === promptEscolhido.grupo &&
-                    p.sequencia === promptEscolhido.sequencia &&
-                    p.frase === promptEscolhido.frase
-                );
-
-                promptsUsados.push(indiceEscolhido);
+                carrosseisUsados.push(indiceEscolhido);
                 contadorGeracoes++;
 
                 contadorGeracoesSpan.textContent = contadorGeracoes;
-                temasRestantesSpan.textContent = promptsDatabase.length - promptsUsados.length;
+                temasRestantesSpan.textContent = CARROSSEIS_TOTAIS.length - carrosseisUsados.length;
 
-                atualizarInfoGrupo(promptEscolhido);
+                categoriaAtualSpan.textContent = obterNomeCategoria(escolhido.tema);
+                grupoAtualSpan.textContent = escolhido.titulo;
+                progressoGrupoSpan.textContent = '5 slides';
 
                 const estilo = document.getElementById('estilo').value;
                 const formato = document.getElementById('formato').value;
                 const dimensoes = obterDimensoesFormato(formato);
-                
+
                 const estilos = {
                     moderno: "moderno, clean, profissional, alta qualidade, iluminação suave, tons de azul e roxo",
                     minimalista: "minimalista, sóbrio, elegante, poucos elementos, fundo limpo, tons neutros",
@@ -1176,43 +1264,50 @@
                     escuro: "dark mode, escuro, sofisticado, contraste, iluminação dramática, tons escuros"
                 };
 
-                const promptIA = `Crie uma imagem para Instagram no formato ${formato} (${dimensoes} pixels).
+                // PROMPT COM 5 SLIDES - SEM TÍTULO DE ABERTURA
+                const descricaoSlides = escolhido.slides.map(s => 
+                    `SLIDE ${s.sequencia}: "${s.frase}" (subtítulo: "${s.subtitulo}")`
+                ).join('\n');
 
-CATEGORIA: ${obterNomeCategoria(promptEscolhido.tema)}
-GRUPO: ${promptEscolhido.grupo} (post ${promptEscolhido.sequencia}/${promptEscolhido.totalGrupo})
+                const promptIA = `Crie um CARROSSEL de 5 imagens para Instagram no formato ${formato} (${dimensoes} pixels). As 5 imagens devem formar uma sequência coesa, todas com o MESMO DNA visual.
 
-IMAGEM PRINCIPAL: ${estilos[estilo]}, relacionado a: ${promptEscolhido.fundo}
+CATEGORIA: ${obterNomeCategoria(escolhido.tema)}
+TEMA DO CARROSSEL: ${escolhido.titulo}
 
-TEXTO PRINCIPAL (em destaque, no centro, fonte grande e legível):
-"${promptEscolhido.frase}"
+FUNDO / ESTILO PARA TODAS AS IMAGENS: ${estilos[estilo]}, relacionado a: ${escolhido.fundo}
 
-SUBTÍTULO (abaixo, fonte menor, fundo semi-transparente):
-"${promptEscolhido.subtitulo}"
+SEQUÊNCIA DE SLIDES (cada um com sua frase principal e subtítulo):
+${descricaoSlides}
 
-RODAPÉ: "makerai" em fonte discreta na parte inferior
-
-REGRAS IMPORTANTES:
-- Frase principal em EVIDÊNCIA, com fonte grande e legível (branca ou clara)
-- Subtítulo com fundo semi-transparente para destacar
+REGRAS PARA CADA SLIDE:
+- Frase principal em EVIDÊNCIA, centralizada, fonte grande e legível (branca ou clara)
+- Subtítulo abaixo, em fonte menor, com fundo semi-transparente
 - Aplicar gradiente escuro sobre a imagem para garantir legibilidade
-- Espaço negativo para o texto respirar
-- Estilo profissional para Instagram
-- NÃO colocar outras marcas ou logos além de "makerai"
-- Cores devem contrastar bem com o texto
-- Fundo 100% COERENTE com o tema e a frase
+- No rodapé, em fonte discreta: "makerai"
+- NÃO colocar outras marcas ou logos
+- NÃO incluir título de abertura ou introdução; comece diretamente com o SLIDE 1
 
-A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase sendo o elemento principal e o fundo complementando perfeitamente a mensagem.`;
+IMPORTANTE:
+- As 5 imagens devem ser visualmente consistentes (mesmo fundo, mesma paleta, mesma vibe)
+- O fundo de cada imagem deve complementar a frase específica, mas mantendo a unidade do grupo
+- Use elementos visuais que remetam à descrição do fundo: ${escolhido.fundo}`;
 
-                const tagsTema = hashtagsTemas[promptEscolhido.tema] || hashtagsTemas.carreira;
+                // TEXTO DA LEGENDA (APENAS AS 5 FRASES)
+                const textoLegenda = escolhido.slides.map(s => 
+                    `🔹 *${s.frase}*\n${s.subtitulo}`
+                ).join('\n\n') + `\n\n——\n✨ Gostou? Salve este carrossel e compartilhe!`;
+
+                // HASHTAGS
+                const tagsTema = hashtagsTemas[escolhido.tema] || hashtagsTemas.carreira;
                 const hashtagsEmbaralhadas = [...tagsTema].sort(() => 0.5 - Math.random());
-                const hashtagsSelecionadas = hashtagsEmbaralhadas.slice(0, 10);
-                const hashtagsFixas = ["#MakerAI", "#DevLife", "#CarrosselDev"];
+                const hashtagsSelecionadas = hashtagsEmbaralhadas.slice(0, 12);
+                const hashtagsFixas = ["#MakerAI", "#CarrosselDev", "#DicasDev"];
                 const hashtagsFinais = [...new Set([...hashtagsSelecionadas, ...hashtagsFixas])].sort();
 
                 promptIADiv.textContent = promptIA;
                 editorPrompt.value = promptIA;
                 promptOriginal = promptIA;
-                frasePostDiv.innerHTML = `<p>"${promptEscolhido.frase}"</p><small>${promptEscolhido.subtitulo}</small>`;
+                textoCarrosselDiv.innerHTML = `<p>${textoLegenda.replace(/\n/g, '<br>')}</p>`;
                 hashtagsListaDiv.innerHTML = hashtagsFinais.join(' · ');
 
                 resultadoDiv.style.display = 'block';
@@ -1221,15 +1316,12 @@ A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase
                     resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
 
-                ultimoPrompt = {
+                ultimoCarrossel = {
                     prompt: promptIA,
-                    frase: promptEscolhido.frase,
-                    subtitulo: promptEscolhido.subtitulo,
+                    legenda: textoLegenda,
                     hashtags: hashtagsFinais,
-                    categoria: obterNomeCategoria(promptEscolhido.tema),
-                    grupo: promptEscolhido.grupo,
-                    sequencia: promptEscolhido.sequencia,
-                    total: promptEscolhido.totalGrupo
+                    categoria: obterNomeCategoria(escolhido.tema),
+                    titulo: escolhido.titulo
                 };
 
                 gerarBtn.classList.remove('loading');
@@ -1245,115 +1337,23 @@ A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase
         }
 
         function copiarPrompt() {
-            if (!ultimoPrompt) return mostrarToast('❌ Gere um prompt primeiro');
-            copiarTexto(ultimoPrompt.prompt, '✅ Prompt copiado!');
+            if (!ultimoCarrossel) return mostrarToast('❌ Gere um carrossel primeiro');
+            copiarTexto(ultimoCarrossel.prompt, '✅ Prompt copiado!');
         }
 
-        function copiarFrase() {
-            if (!ultimoPrompt) return mostrarToast('❌ Gere um prompt primeiro');
-
-            let explicacao = "";
-
-            switch (ultimoPrompt.categoria) {
-                case 'Carreira':
-                    explicacao = "Esta frase nos convida a refletir sobre nossa jornada profissional e como cada passo, por menor que seja, constrói nosso futuro na tecnologia.";
-                    break;
-                case 'Programação':
-                    explicacao = "Uma reflexão sobre a prática de programar, lembrando que a lógica e a consistência são mais importantes que a pressa ou a quantidade de código.";
-                    break;
-                case 'Front-end':
-                    explicacao = "No desenvolvimento front-end, os detalhes fazem toda diferença. Esta frase nos lembra da importância de cuidar da experiência do usuário.";
-                    break;
-                case 'React':
-                    explicacao = "React nos ensina sobre componentização e reuso. Esta frase traz uma reflexão sobre como organizamos nosso código e nosso pensamento.";
-                    break;
-                case 'IA':
-                    explicacao = "A inteligência artificial é uma ferramenta poderosa, mas o toque humano e o pensamento crítico continuam sendo insubstituíveis.";
-                    break;
-                case 'Design':
-                    explicacao = "Design vai além da estética - é sobre resolver problemas e criar experiências que realmente conectem com as pessoas.";
-                    break;
-                case 'GitHub':
-                    explicacao = "Seu GitHub é mais que código - é sua identidade profissional e a história da sua evolução como desenvolvedor.";
-                    break;
-                case 'Soft Skills':
-                    explicacao = "Habilidades técnicas são importantes, mas são as soft skills que realmente constroem carreiras duradouras e times de sucesso.";
-                    break;
-                case 'Dados':
-                    explicacao = "Dados contam histórias, mas é a interpretação humana que transforma números em decisões estratégicas e impacto real.";
-                    break;
-                case 'Back-end':
-                    explicacao = "O back-end é a espinha dorsal de qualquer aplicação. Esta frase nos lembra da importância de construir bases sólidas e escaláveis.";
-                    break;
-                case 'Inovação':
-                    explicacao = "Inovar não é só criar algo novo, mas enxergar possibilidades onde outros só veem problemas. É sobre ter coragem de tentar.";
-                    break;
-                case 'Frases Curtas':
-                    explicacao = "Pequenas frases carregam grandes verdades. Esta é daquelas que ficam na mente e nos fazem repensar nossa prática diária.";
-                    break;
-                default:
-                    explicacao = "Esta frase nos convida a refletir sobre nossa prática diária e como podemos evoluir como profissionais e pessoas.";
-            }
-
-            const textoDescritivo = `${ultimoPrompt.frase}
-
-${ultimoPrompt.subtitulo}
-
-${explicacao}
-
-#MakerAI #DevLife #CarrosselDev`;
-
-            copiarTexto(textoDescritivo, '✅ Texto copiado!');
+        function copiarLegenda() {
+            if (!ultimoCarrossel) return mostrarToast('❌ Gere um carrossel primeiro');
+            copiarTexto(ultimoCarrossel.legenda, '✅ Legenda copiada!');
         }
 
         function copiarHashtags() {
-            if (!ultimoPrompt) return mostrarToast('❌ Gere um prompt primeiro');
-            copiarTexto(ultimoPrompt.hashtags.join(' '), '✅ Hashtags copiadas!');
+            if (!ultimoCarrossel) return mostrarToast('❌ Gere um carrossel primeiro');
+            copiarTexto(ultimoCarrossel.hashtags.join(' '), '✅ Hashtags copiadas!');
         }
 
         function copiarTudo() {
-            if (!ultimoPrompt) return mostrarToast('❌ Gere um prompt primeiro');
-
-            const categoria = ultimoPrompt.categoria || '';
-            const grupo = ultimoPrompt.grupo || '';
-            const sequencia = ultimoPrompt.sequencia || '';
-            const total = ultimoPrompt.total || '';
-
-            const textoCompleto = `══════════════════════════════
-✨ MAKERAI - POST PARA CARROSSEL ✨
-══════════════════════════════
-
-📌 **CATEGORIA:** ${categoria}
-📋 **GRUPO:** ${grupo}
-🔢 **SEQUÊNCIA:** Post ${sequencia}/${total}
-
-──────────────────────────────
-
-💬 **FRASE PRINCIPAL:**
-"${ultimoPrompt.frase}"
-
-📝 **SUBTÍTULO:**
-${ultimoPrompt.subtitulo}
-
-──────────────────────────────
-
-🎨 **PROMPT PARA IMAGEM:**
-${ultimoPrompt.prompt}
-
-──────────────────────────────
-
-🔍 **HASHTAGS:**
-${ultimoPrompt.hashtags.join(' ')}
-
-──────────────────────────────
-
-📱 **DICAS DE USO:**
-• Use a frase principal no primeiro slide
-• O subtítulo pode complementar ou ser usado na legenda
-• Post produzido por MAKERAI
-
-══════════════════════════════`;
-
+            if (!ultimoCarrossel) return mostrarToast('❌ Gere um carrossel primeiro');
+            const textoCompleto = `${ultimoCarrossel.legenda}\n\n${ultimoCarrossel.hashtags.join(' ')}\n\n---\nPROMPT DAS IMAGENS:\n${ultimoCarrossel.prompt}`;
             copiarTexto(textoCompleto, '✅ Tudo copiado!');
         }
 
@@ -1372,25 +1372,25 @@ ${ultimoPrompt.hashtags.join(' ')}
         }
 
         function resetarProgresso() {
-            if (confirm('Resetar todos os prompts usados e começar de novo?')) {
-                promptsUsados = [];
+            if (confirm('Resetar todos os carrosséis usados e começar de novo?')) {
+                carrosseisUsados = [];
                 contadorGeracoes = 0;
-                ultimoPrompt = null;
+                ultimoCarrossel = null;
                 promptOriginal = null;
                 contadorGeracoesSpan.textContent = '0';
-                temasRestantesSpan.textContent = '300';
+                temasRestantesSpan.textContent = CARROSSEIS_TOTAIS.length;
                 resultadoDiv.style.display = 'none';
                 categoriaAtualSpan.textContent = 'Programação';
-                grupoAtualSpan.textContent = 'Grupo 1/5';
-                progressoGrupoSpan.textContent = 'Post 1/5';
+                grupoAtualSpan.textContent = 'Carrossel';
+                progressoGrupoSpan.textContent = '5 slides';
                 mostrarToast('✅ Progresso resetado!');
             }
         }
 
-        gerarBtn.addEventListener('click', gerarPromptUnico);
+        gerarBtn.addEventListener('click', gerarCarrosselUnico);
         resetBtn.addEventListener('click', resetarProgresso);
         copiarPromptBtn.addEventListener('click', copiarPrompt);
-        copiarFraseBtn.addEventListener('click', copiarFrase);
+        copiarFraseBtn.addEventListener('click', copiarLegenda);
         copiarHashtagsBtn.addEventListener('click', copiarHashtags);
         copiarTudoBtn.addEventListener('click', copiarTudo);
         copiarEditorBtn.addEventListener('click', copiarEditor);
@@ -1398,7 +1398,7 @@ ${ultimoPrompt.hashtags.join(' ')}
 
         window.addEventListener('load', () => {
             setTimeout(() => {
-                gerarPromptUnico();
+                gerarCarrosselUnico();
             }, 200);
         });
     </script>
