@@ -149,7 +149,7 @@
 
         .controles-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 0.5fr;
+            grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
             gap: 6px;
             margin-bottom: 16px;
         }
@@ -220,7 +220,7 @@
             background: #3f3760;
         }
 
-        select {
+        select, .formato-select {
             background: #1e1b2c;
             border: 1.5px solid #332f48;
             color: #fff;
@@ -300,6 +300,67 @@
             border: 1px solid #2e2a40;
         }
 
+        .editor-prompt {
+            background: #0f0d17;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 14px 0 8px;
+            border: 2px solid #6b5fd3;
+        }
+
+        .editor-prompt h4 {
+            color: #b3a6ff;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .editor-texto {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #fff;
+            background: #1a1728;
+            border: 1px solid #45415f;
+            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            min-height: 180px;
+            resize: vertical;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .editor-texto:focus {
+            border-color: #8f7df5;
+        }
+
+        .editor-acoes {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-editor {
+            background: #272339;
+            border: 1px solid #45415f;
+            border-radius: 30px;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            color: #ddd6ff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-editor:hover {
+            background: #35304f;
+        }
+
         .hashtags {
             background: #201d30;
             border-radius: 30px;
@@ -319,7 +380,6 @@
             margin-top: 12px;
         }
 
-        /* Ajuste para mobile - quando a tela for muito pequena */
         @media (max-width: 360px) {
             .acoes-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -341,8 +401,8 @@
             cursor: pointer;
             transition: background 0.2s ease;
             width: 100%;
-            min-width: 0; /* Permite que o botão encolha */
-            word-break: keep-all; /* Evita quebra de palavras */
+            min-width: 0;
+            word-break: keep-all;
         }
 
         .btn-acoes span {
@@ -362,7 +422,6 @@
             background: #342f4a;
         }
 
-        /* Ajuste para telas muito pequenas */
         @media (max-width: 320px) {
             .btn-acoes {
                 font-size: 0.6rem;
@@ -453,6 +512,12 @@
                 <option value="futurista">🤖 Futurista</option>
                 <option value="escuro">🌑 Dark</option>
             </select>
+            <select id="formato" class="formato-select">
+                <option value="1:1">📐 Quadrado (1:1)</option>
+                <option value="4:5" selected>📱 Retrato (4:5)</option>
+                <option value="16:9">🖥️ Paisagem (16:9)</option>
+                <option value="9:16">📱 Story/Reel (9:16)</option>
+            </select>
             <button class="btn-primario" id="gerarBtn">
                 <span>✨</span> Gerar
             </button>
@@ -467,6 +532,16 @@
             <div class="caixa-prompt">
                 <h4>📋 PROMPT PARA IMAGEM</h4>
                 <div class="prompt-texto" id="promptIA"></div>
+            </div>
+
+            <!-- EDITOR DE PROMPT -->
+            <div class="editor-prompt">
+                <h4>✏️ EDITAR PROMPT (personalize antes de copiar)</h4>
+                <textarea class="editor-texto" id="editorPrompt" placeholder="O prompt gerado aparecerá aqui. Edite à vontade!"></textarea>
+                <div class="editor-acoes">
+                    <button class="btn-editor" id="restaurarPromptBtn"><span>↺</span> Restaurar original</button>
+                    <button class="btn-editor" id="copiarEditorBtn"><span>📋</span> Copiar editado</button>
+                </div>
             </div>
 
             <div class="hashtags" id="hashtagsLista"></div>
@@ -937,6 +1012,7 @@
 
         let promptsUsados = [];
         let ultimoPrompt = null;
+        let promptOriginal = null;
         let contadorGeracoes = 0;
         let categoriaAtual = '';
         let grupoAtual = '';
@@ -951,12 +1027,15 @@
         const grupoAtualSpan = document.getElementById('grupoAtual');
         const progressoGrupoSpan = document.getElementById('progressoGrupo');
         const promptIADiv = document.getElementById('promptIA');
+        const editorPrompt = document.getElementById('editorPrompt');
         const frasePostDiv = document.getElementById('frasePost');
         const hashtagsListaDiv = document.getElementById('hashtagsLista');
         const copiarPromptBtn = document.getElementById('copiarPromptBtn');
         const copiarFraseBtn = document.getElementById('copiarFraseBtn');
         const copiarHashtagsBtn = document.getElementById('copiarHashtagsBtn');
         const copiarTudoBtn = document.getElementById('copiarTudoBtn');
+        const restaurarPromptBtn = document.getElementById('restaurarPromptBtn');
+        const copiarEditorBtn = document.getElementById('copiarEditorBtn');
 
         function mostrarToast(mensagem) {
             const toast = document.createElement('div');
@@ -992,6 +1071,16 @@
                 curtas: 'Frases Curtas'
             };
             return nomes[tema] || tema;
+        }
+
+        function obterDimensoesFormato(formato) {
+            const formatos = {
+                '1:1': '1080x1080',
+                '4:5': '1080x1350',
+                '16:9': '1080x608',
+                '9:16': '1080x1920'
+            };
+            return formatos[formato] || '1080x1350';
         }
 
         function gerarPromptUnico() {
@@ -1076,6 +1165,9 @@
                 atualizarInfoGrupo(promptEscolhido);
 
                 const estilo = document.getElementById('estilo').value;
+                const formato = document.getElementById('formato').value;
+                const dimensoes = obterDimensoesFormato(formato);
+                
                 const estilos = {
                     moderno: "moderno, clean, profissional, alta qualidade, iluminação suave, tons de azul e roxo",
                     minimalista: "minimalista, sóbrio, elegante, poucos elementos, fundo limpo, tons neutros",
@@ -1084,7 +1176,7 @@
                     escuro: "dark mode, escuro, sofisticado, contraste, iluminação dramática, tons escuros"
                 };
 
-                const promptIA = `Crie uma imagem para Instagram no formato 4:5 (1080x1350 pixels).
+                const promptIA = `Crie uma imagem para Instagram no formato ${formato} (${dimensoes} pixels).
 
 CATEGORIA: ${obterNomeCategoria(promptEscolhido.tema)}
 GRUPO: ${promptEscolhido.grupo} (post ${promptEscolhido.sequencia}/${promptEscolhido.totalGrupo})
@@ -1118,6 +1210,8 @@ A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase
                 const hashtagsFinais = [...new Set([...hashtagsSelecionadas, ...hashtagsFixas])].sort();
 
                 promptIADiv.textContent = promptIA;
+                editorPrompt.value = promptIA;
+                promptOriginal = promptIA;
                 frasePostDiv.innerHTML = `<p>"${promptEscolhido.frase}"</p><small>${promptEscolhido.subtitulo}</small>`;
                 hashtagsListaDiv.innerHTML = hashtagsFinais.join(' · ');
 
@@ -1263,11 +1357,26 @@ ${ultimoPrompt.hashtags.join(' ')}
             copiarTexto(textoCompleto, '✅ Tudo copiado!');
         }
 
+        function copiarEditor() {
+            if (!editorPrompt.value) return mostrarToast('❌ Nada para copiar');
+            copiarTexto(editorPrompt.value, '✅ Prompt editado copiado!');
+        }
+
+        function restaurarOriginal() {
+            if (promptOriginal) {
+                editorPrompt.value = promptOriginal;
+                mostrarToast('✅ Prompt original restaurado');
+            } else {
+                mostrarToast('❌ Nenhum prompt original encontrado');
+            }
+        }
+
         function resetarProgresso() {
             if (confirm('Resetar todos os prompts usados e começar de novo?')) {
                 promptsUsados = [];
                 contadorGeracoes = 0;
                 ultimoPrompt = null;
+                promptOriginal = null;
                 contadorGeracoesSpan.textContent = '0';
                 temasRestantesSpan.textContent = '300';
                 resultadoDiv.style.display = 'none';
@@ -1284,6 +1393,8 @@ ${ultimoPrompt.hashtags.join(' ')}
         copiarFraseBtn.addEventListener('click', copiarFrase);
         copiarHashtagsBtn.addEventListener('click', copiarHashtags);
         copiarTudoBtn.addEventListener('click', copiarTudo);
+        copiarEditorBtn.addEventListener('click', copiarEditor);
+        restaurarPromptBtn.addEventListener('click', restaurarOriginal);
 
         window.addEventListener('load', () => {
             setTimeout(() => {
