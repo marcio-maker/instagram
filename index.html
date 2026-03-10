@@ -319,6 +319,13 @@
             margin-top: 12px;
         }
 
+        /* Ajuste para mobile - quando a tela for muito pequena */
+        @media (max-width: 360px) {
+            .acoes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .btn-acoes {
             background: #272339;
             border: 1px solid #45415f;
@@ -333,6 +340,9 @@
             gap: 2px;
             cursor: pointer;
             transition: background 0.2s ease;
+            width: 100%;
+            min-width: 0; /* Permite que o botão encolha */
+            word-break: keep-all; /* Evita quebra de palavras */
         }
 
         .btn-acoes span {
@@ -350,6 +360,17 @@
             gap: 6px;
             padding: 10px;
             background: #342f4a;
+        }
+
+        /* Ajuste para telas muito pequenas */
+        @media (max-width: 320px) {
+            .btn-acoes {
+                font-size: 0.6rem;
+                padding: 8px 2px;
+            }
+            .btn-acoes span {
+                font-size: 0.9rem;
+            }
         }
 
         footer {
