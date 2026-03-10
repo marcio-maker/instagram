@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -35,7 +34,6 @@
             border: 1px solid #2a2838;
         }
 
-        /* HEADER COMPACTO */
         .header-row {
             display: grid;
             grid-template-columns: auto 1fr auto auto;
@@ -102,7 +100,6 @@
             cursor: pointer;
         }
 
-        /* INFO GRUPO COMPACTA */
         .grupo-info-row {
             display: grid;
             grid-template-columns: 1fr auto auto;
@@ -150,7 +147,6 @@
             white-space: nowrap;
         }
 
-        /* CONTROLES EM GRID */
         .controles-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 0.5fr;
@@ -172,7 +168,6 @@
             gap: 4px;
             box-shadow: 0 4px 10px rgba(103, 80, 200, 0.3);
             cursor: pointer;
-            border: none;
             white-space: nowrap;
             transition: transform 0.1s ease, opacity 0.2s ease;
         }
@@ -337,7 +332,6 @@
             align-items: center;
             gap: 2px;
             cursor: pointer;
-            border: none;
             transition: background 0.2s ease;
         }
 
@@ -389,7 +383,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -397,10 +390,8 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
-        <!-- HEADER COMPACTO -->
         <div class="header-row">
             <span class="logo">MAKERAI</span>
             <span class="badge">300 prompts</span>
@@ -427,14 +418,12 @@
             </div>
         </div>
 
-        <!-- INFO DO GRUPO ATUAL -->
         <div class="grupo-info-row">
             <span class="categoria-tag" id="categoriaAtual">Programação</span>
             <span class="grupo-tag" id="grupoAtual">Grupo 1/5</span>
             <span class="progresso-tag" id="progressoGrupo">Post 1/5</span>
         </div>
 
-        <!-- CONTROLES: estilo, gerar e reset -->
         <div class="controles-grid">
             <select id="estilo">
                 <option value="moderno">🎨 Moderno</option>
@@ -451,7 +440,6 @@
             </button>
         </div>
 
-        <!-- ÁREA DE RESULTADO -->
         <div id="resultado" class="resultado">
             <div class="frase-destaque" id="frasePost"></div>
 
@@ -462,7 +450,6 @@
 
             <div class="hashtags" id="hashtagsLista"></div>
 
-            <!-- BOTÕES DE AÇÃO -->
             <div class="acoes-grid">
                 <button class="btn-acoes" id="copiarPromptBtn"><span>📋</span> prompt</button>
                 <button class="btn-acoes" id="copiarFraseBtn"><span>💬</span> frase</button>
@@ -477,12 +464,6 @@
     </footer>
 
     <script>
-        // ============================================
-        // 300 PROMPTS ORGANIZADOS EM GRUPOS DE 5
-        // ORDEM REVISADA: Fundamentos → Front → Back → Ferramentas → Carreira → Design → Dados → Inovação
-        // ============================================
-
-        // Helper para criar grupos sequenciais
         function criarGrupo(tema, grupoNome, frases) {
             return frases.map((f, idx) => ({
                 tema: tema,
@@ -496,8 +477,6 @@
         }
 
         const promptsDatabase = [
-            // ========== 1. PROGRAMAÇÃO (Fundamentos) - 25 prompts ==========
-            // Grupo 1: Lógica e fundamentos
             ...criarGrupo('programacao', '🧠 Lógica e fundamentos', [
                 { frase: "Lógica é a base, código é só ferramenta", subtitulo: "Sem lógica, código não resolve nada", fundo: "quebra-cabeça lógico sendo resolvido, mente afiada" },
                 { frase: "Algoritmo é receita, dado é ingrediente", subtitulo: "Boa receita com ingrediente ruim = prato ruim", fundo: "receita sendo seguida, ingredientes frescos" },
@@ -505,7 +484,6 @@
                 { frase: "Pensar > Digitar (e muito)", subtitulo: "Raciocínio vale mais que syntaxe", fundo: "pessoa pensando profundamente, código mental" },
                 { frase: "Complexidade importa - O(n) faz diferença", subtitulo: "Algoritmo eficiente = usuário feliz", fundo: "gráfico de complexidade, tempo vs input" }
             ]),
-            // Grupo 2: Boas práticas
             ...criarGrupo('programacao', '✨ Boas práticas', [
                 { frase: "Clean code não é luxo - é necessidade", subtitulo: "Código legível é código mantível", fundo: "código limpo, indentado, variáveis com nomes claros" },
                 { frase: "DRY: Don't Repeat Yourself (a menos que seja café)", subtitulo: "Repetição em código = dívida técnica", fundo: "código com funções reutilizáveis, elegância" },
@@ -513,7 +491,6 @@
                 { frase: "YAGNI: You Ain't Gonna Need It (então não escreva)", subtitulo: "Código futuro é especulação, código presente é entrega", fundo: "código enxuto, sem firulas, foco" },
                 { frase: "Comentário explica o porquê, não o como", subtitulo: "O como está no código - leia ele", fundo: "código comentado explicando decisões de negócio" }
             ]),
-            // Grupo 3: Debugging
             ...criarGrupo('programacao', '🐛 Debugging', [
                 { frase: "Debugging é ser detetive do seu próprio crime", subtitulo: "E 99% das vezes você é o culpado", fundo: "detetive investigando, lupa, código sendo debugado" },
                 { frase: "Console.log salva vidas (e empregos)", subtitulo: "Debug básico ainda é o mais usado", fundo: "console.log no código, debug simples mas eficaz" },
@@ -521,7 +498,6 @@
                 { frase: "Leia o erro antes de sair mudando código", subtitulo: "A mensagem de erro está ali por um motivo", fundo: "dev lendo atentamente mensagem de erro" },
                 { frase: "Bug não é feature - corrija", subtitulo: "'Feature não documentada' só funciona uma vez", fundo: "bug sendo corrigido, dev concentrado" }
             ]),
-            // Grupo 4: Testes
             ...criarGrupo('programacao', '✅ Testes', [
                 { frase: "Teste é cinto de segurança - use sempre", subtitulo: "Melhor prevenir do que debugar em produção", fundo: "cinto de segurança sendo afivelado, código com testes" },
                 { frase: "Código sem teste é código quebrado esperando acontecer", subtitulo: "Teste não é opcional - é garantia", fundo: "código sem testes, alerta vermelho, perigo" },
@@ -529,7 +505,6 @@
                 { frase: "Teste automatizado dorme, você também", subtitulo: "Máquina testa, você descansa", fundo: "dev dormindo tranquilo, testes passando sozinhos" },
                 { frase: "Cobertura de teste não é 100%? Aceitável, mas cuidado", subtitulo: "100% é ideal, mas pragmatismo vence", fundo: "gráfico de cobertura, equilíbrio" }
             ]),
-            // Grupo 5: Versionamento
             ...criarGrupo('programacao', '📦 Versionamento', [
                 { frase: "Git não é opcional - é obrigação", subtitulo: "Trabalha sem git? Trabalha sem rede", fundo: "git em ação, commits, branches, organização" },
                 { frase: "Commit todo dia, evolua todo dia", subtitulo: "Verde no GitHub não é vício - é constância", fundo: "gráfico de contribuições todo verde, consistência" },
@@ -537,9 +512,6 @@
                 { frase: "Branch organizada = time feliz", subtitulo: "Git flow, trunk based - escolha e siga", fundo: "branch strategy visualizada, organização" },
                 { frase: "git revert é perdão dos pecados", subtitulo: "Errou? git revert e segue o jogo", fundo: "git revert sendo executado, erro corrigido" }
             ]),
-
-            // ========== 2. FRONT-END - 25 prompts ==========
-            // Grupo 1: HTML & CSS
             ...criarGrupo('frontend', '🎨 HTML & CSS', [
                 { frase: "HTML é a estrutura, CSS é a roupa", subtitulo: "Esqueleto e estilo - ambos importam", fundo: "esqueleto de site sendo vestido com CSS" },
                 { frase: "CSS não é difícil, é detalhe (e os detalhes são o inferno)", subtitulo: "Paciência e prática dominam", fundo: "código CSS com ajustes finos, pixel perfeito" },
@@ -547,7 +519,6 @@
                 { frase: "Grid é poder - use com responsabilidade", subtitulo: "Layouts complexos ficaram simples", fundo: "grid CSS em ação, linhas e colunas" },
                 { frase: "Responsividade é sobre se adaptar", subtitulo: "Seu layout precisa funcionar em qualquer tela", fundo: "mesmo site em diferentes dispositivos, adaptação" }
             ]),
-            // Grupo 2: JavaScript
             ...criarGrupo('frontend', '⚡ JavaScript', [
                 { frase: "JavaScript é a lingua franca da web", subtitulo: "Aprenda JS de verdade, o resto vem", fundo: "código JavaScript rodando, onipresença" },
                 { frase: "Event Loop é mágica (compreensível)", subtitulo: "Entenda como JS funciona de verdade", fundo: "event loop visualizado, call stack" },
@@ -555,7 +526,6 @@
                 { frase: "Assincronia é o superpoder do JS", subtitulo: "Promises, async/await - domine ou sofra", fundo: "código assíncrono, promises sendo resolvidas" },
                 { frase: "Vanilla JS ainda é rei", subtitulo: "Antes do framework, aprenda a linguagem", fundo: "JavaScript puro, sem frameworks, essência" }
             ]),
-            // Grupo 3: Frameworks
             ...criarGrupo('frontend', '🔧 Frameworks', [
                 { frase: "Framework é ferramenta, não religião", subtitulo: "Escolha o melhor para o problema", fundo: "diferentes frameworks, escolha consciente" },
                 { frase: "React, Vue, Angular - todos ensinam algo", subtitulo: "Conheça um, respeite os outros", fundo: "logos dos frameworks em harmonia" },
@@ -563,7 +533,6 @@
                 { frase: "Documentação é seu melhor amigo", subtitulo: "RTFM - Read The F****** Manual", fundo: "documentação sendo lida, entendimento" },
                 { frase: "Comunidade faz o framework - participe", subtitulo: "Open source vive de contribuição", fundo: "comunidade tech colaborando" }
             ]),
-            // Grupo 4: Performance
             ...criarGrupo('frontend', '🚀 Performance', [
                 { frase: "Performance é feature - não negocie", subtitulo: "Usuário não espera - 3 segundos e foi", fundo: "relâmpago, velocidade, carregamento rápido" },
                 { frase: "Core Web Vitals importam (pra caramba)", subtitulo: "Google mede - seu tráfego depende", fundo: "Core Web Vitals, métricas, otimização" },
@@ -571,7 +540,6 @@
                 { frase: "Lazy loading não é preguiça - é estratégia", subtitulo: "Carregue só o que precisa, quando precisa", fundo: "lazy loading em ação, carregamento sob demanda" },
                 { frase: "Bundle size importa - tree shake", subtitulo: "Código não usado é peso morto", fundo: "bundle sendo otimizado, tree shaking" }
             ]),
-            // Grupo 5: Acessibilidade
             ...criarGrupo('frontend', '♿ Acessibilidade', [
                 { frase: "Acessibilidade não é feature - é direito", subtitulo: "Web para todos, sem exceção", fundo: "pessoas com deficiência usando a web, inclusão" },
                 { frase: "Alt text descreve imagem - use", subtitulo: "Leitor de tela precisa entender", fundo: "código com alt text descritivo, acessibilidade" },
@@ -579,9 +547,6 @@
                 { frase: "Navegação por teclado é obrigatória", subtitulo: "Nem todo mundo usa mouse", fundo: "navegação por teclado, focus visível" },
                 { frase: "ARIA labels salvam vidas digitais", subtitulo: "Use quando HTML não basta", fundo: "ARIA labels em ação, acessibilidade avançada" }
             ]),
-
-            // ========== 3. REACT - 25 prompts ==========
-            // Grupo 1: Componentes
             ...criarGrupo('react', '🧩 Componentes', [
                 { frase: "Componente é bloco de Lego - reutilize", subtitulo: "Escreva uma vez, use sempre", fundo: "blocos de Lego formando UI, reutilização" },
                 { frase: "Props são parâmetros do sucesso", subtitulo: "Componente bem parametrizado é flexível", fundo: "props sendo passadas, fluxo de dados" },
@@ -589,7 +554,6 @@
                 { frase: "Composição > Herança (sempre)", subtitulo: "Combine componentes, não estenda", fundo: "componentes sendo compostos, hierarquia" },
                 { frase: "Key em listas não é opcional", subtitulo: "React precisa saber quem é quem", fundo: "lista renderizada com keys únicas" }
             ]),
-            // Grupo 2: Hooks
             ...criarGrupo('react', '🎣 Hooks', [
                 { frase: "Hooks mudaram minha vida (e meu código)", subtitulo: "useState, useEffect - ame-os", fundo: "hooks em ação, componentes funcionais" },
                 { frase: "useState é coração do componente", subtitulo: "Estado local bem gerenciado", fundo: "useState gerenciando estado, componente reagindo" },
@@ -597,7 +561,6 @@
                 { frase: "useCallback memoiza funções", subtitulo: "Performance quando necessário", fundo: "useCallback evitando re-renders" },
                 { frase: "Custom hooks são superpoderes", subtitulo: "Crie seus próprios hooks - reuse lógica", fundo: "custom hook sendo criado, reuso" }
             ]),
-            // Grupo 3: Estado
             ...criarGrupo('react', '📊 Estado', [
                 { frase: "Estado local vs global - escolha bem", subtitulo: "Nem tudo precisa estar no Redux", fundo: "balança comparando estado local e global" },
                 { frase: "Prop drilling é evil - use Context", subtitulo: "Passar props por 10 níveis? Não", fundo: "contexto fluindo, prop drilling evitado" },
@@ -605,7 +568,6 @@
                 { frase: "Zustand é alternativa leve", subtitulo: "Pequeno, rápido, eficiente", fundo: "Zustand store minimalista" },
                 { frase: "Imutabilidade é lei - não quebre", subtitulo: "Nunca mutle estado diretamente", fundo: "código respeitando imutabilidade" }
             ]),
-            // Grupo 4: Performance React
             ...criarGrupo('react', '⚡ Performance', [
                 { frase: "React.memo evita re-renders", subtitulo: "Componente puro, menos renders", fundo: "React.memo evitando renders desnecessários" },
                 { frase: "useMemo otimiza cálculo pesado", subtitulo: "Memoização é vida", fundo: "useMemo otimizando cálculos" },
@@ -613,7 +575,6 @@
                 { frase: "Code splitting = carregamento rápido", subtitulo: "Só carregue o que precisa agora", fundo: "código sendo dividido, lazy loading" },
                 { frase: "Bundle analyzer é seu amigo", subtitulo: "Veja o que está pesando", fundo: "bundle analyzer, visualização" }
             ]),
-            // Grupo 5: Ecossistema
             ...criarGrupo('react', '🌐 Ecossistema', [
                 { frase: "Next.js é React que virou adulto", subtitulo: "SSR, SSG, ISR - tudo junto", fundo: "Next.js logo, server-side rendering" },
                 { frase: "React Native, React que vira app", subtitulo: "Mobile com o que você já sabe", fundo: "React Native rodando em iOS e Android" },
@@ -621,9 +582,6 @@
                 { frase: "Tailwind + React = produtividade", subtitulo: "CSS sem sair do HTML", fundo: "Tailwind classes em componentes React" },
                 { frase: "React Router te leva pra vaga", subtitulo: "Rotas bem definidas = app bem estruturado", fundo: "rotas sendo navegadas, React Router" }
             ]),
-
-            // ========== 4. BACK-END - 25 prompts ==========
-            // Grupo 1: APIs
             ...criarGrupo('backend', '🔌 APIs', [
                 { frase: "API bem feita é ponte de sucesso", subtitulo: "Documentação clara, devs felizes", fundo: "API documentation" },
                 { frase: "REST é padrão, GraphQL é evolução", subtitulo: "Cada um tem seu caso", fundo: "REST vs GraphQL" },
@@ -631,7 +589,6 @@
                 { frase: "Versionamento de API salva", subtitulo: "Não quebre quem usa", fundo: "versionamento de API" },
                 { frase: "Rate limite protege seu backend", subtitulo: "Não deixe abusarem", fundo: "rate limiting" }
             ]),
-            // Grupo 2: Banco de dados
             ...criarGrupo('backend', '🗄️ Banco de dados', [
                 { frase: "Banco de dados é coração do sistema", subtitulo: "Cuide bem", fundo: "banco de dados, coração" },
                 { frase: "SQL é conversar com dados", subtitulo: "SELECT * FROM conhecimento", fundo: "SQL query" },
@@ -639,7 +596,6 @@
                 { frase: "Índices aceleram - use", subtitulo: "Sem índice, query lenta", fundo: "índices em banco de dados" },
                 { frase: "Backup não é opcional", subtitulo: "Quando perder, vai querer ter", fundo: "backup, segurança" }
             ]),
-            // Grupo 3: Arquitetura
             ...criarGrupo('backend', '🏗️ Arquitetura', [
                 { frase: "Microserviços escalam, monolito simplifica", subtitulo: "Arquitetura depende do contexto", fundo: "microserviços vs monólito" },
                 { frase: "Message broker desacopla", subtitulo: "RabbitMQ, Kafka - filas salvam", fundo: "message broker" },
@@ -647,7 +603,6 @@
                 { frase: "Serverless é foco no código", subtitulo: "Infra que você não gerencia", fundo: "serverless" },
                 { frase: "Cloud é escala infinita", subtitulo: "Pague pelo que usar", fundo: "cloud computing" }
             ]),
-            // Grupo 4: Segurança
             ...criarGrupo('backend', '🔒 Segurança', [
                 { frase: "Autenticação é segurança, não burocracia", subtitulo: "Proteja seus usuários", fundo: "autenticação, login" },
                 { frase: "JWT é identidade, session é estado", subtitulo: "Escolha a estratégia certa", fundo: "JWT token" },
@@ -655,7 +610,6 @@
                 { frase: "SQL injection mata - previna", subtitulo: "ORM ajuda, mas não resolve tudo", fundo: "SQL injection prevention" },
                 { frase: "Senhas: hash + salt, sempre", subtitulo: "Nunca guarde texto puro", fundo: "hash de senhas" }
             ]),
-            // Grupo 5: DevOps
             ...criarGrupo('backend', '⚙️ DevOps', [
                 { frase: "DevOps é cultura, não ferramenta", subtitulo: "Todo mundo é responsável", fundo: "DevOps cultura" },
                 { frase: "Docker encapsula, Kubernetes orquestra", subtitulo: "Container é leve, cluster é poder", fundo: "Docker, Kubernetes" },
@@ -663,9 +617,6 @@
                 { frase: "Monitoramento é visibilidade", subtitulo: "Veja o que acontece", fundo: "monitoring" },
                 { frase: "Logs são memória do sistema", subtitulo: "Quando quebra, é onde olha", fundo: "logs analysis" }
             ]),
-
-            // ========== 5. GITHUB (Ferramentas) - 25 prompts ==========
-            // Grupo 1: Perfil e presença
             ...criarGrupo('github', '👤 Perfil', [
                 { frase: "GitHub é seu currículo vivo", subtitulo: "Recrutador olha antes do LinkedIn", fundo: "perfil do GitHub, contribuições verdes" },
                 { frase: "README do perfil é carta de apresentação", subtitulo: "Capriche na primeira impressão", fundo: "profile README criativo" },
@@ -673,7 +624,6 @@
                 { frase: "Seus repositórios falam por você", subtitulo: "Código limpo = profissional confiável", fundo: "repositórios organizados" },
                 { frase: "Star em projeto é like em dev", subtitulo: "Reconheça trabalho alheio", fundo: "stars em repositórios" }
             ]),
-            // Grupo 2: Repositórios
             ...criarGrupo('github', '📦 Repositórios', [
                 { frase: "README bonito é portfólio que vende", subtitulo: "Documente como se fosse para seu chefe", fundo: "README bem formatado, emblemas" },
                 { frase: "License importa - escolha a certa", subtitulo: "Código sem licença = ninguém usa", fundo: "licenças open source" },
@@ -681,7 +631,6 @@
                 { frase: "Issues são oportunidades de ajudar", subtitulo: "Resolva problemas, ganhe experiência", fundo: "issues sendo resolvidas" },
                 { frase: "Wiki é documentação viva", subtitulo: "Mantenha atualizada", fundo: "GitHub wiki, documentação" }
             ]),
-            // Grupo 3: Colaboração
             ...criarGrupo('github', '🤝 Colaboração', [
                 { frase: "Pull request é colaboração, não competição", subtitulo: "Code review é presente", fundo: "pull request sendo revisado" },
                 { frase: "Code review construtivo ensina", subtitulo: "Aprenda a dar e receber", fundo: "code review construtivo" },
@@ -689,7 +638,6 @@
                 { frase: "Clone é trazer pra perto", subtitulo: "Colabore localmente", fundo: "git clone sendo executado" },
                 { frase: "Open source é o MBA que não tem preço", subtitulo: "Contribuir ensina mais que curso", fundo: "contribuições open source" }
             ]),
-            // Grupo 4: Git avançado
             ...criarGrupo('github', '🔧 Git avançado', [
                 { frase: "Branch organizada = time feliz", subtitulo: "Git flow, trunk based - escolha", fundo: "branch strategy visualizada" },
                 { frase: "Commit message conta história", subtitulo: "'fix' não é mensagem", fundo: "commit messages descritivas" },
@@ -697,7 +645,6 @@
                 { frase: "git stash salva vidas", subtitulo: "Mudança não commitada? stash", fundo: "git stash em ação" },
                 { frase: "git revert é perdão dos pecados", subtitulo: "Errou? git revert e segue", fundo: "git revert sendo executado" }
             ]),
-            // Grupo 5: GitHub Actions e automação
             ...criarGrupo('github', '⚙️ Automação', [
                 { frase: "GitHub Actions automatiza tudo", subtitulo: "CI/CD é modernidade", fundo: "GitHub Actions rodando" },
                 { frase: "Deploy automático = paz", subtitulo: "Push na main sobe sozinho", fundo: "deploy automático" },
@@ -705,9 +652,6 @@
                 { frase: "Pages é site grátis", subtitulo: "Portfólio sem custo", fundo: "GitHub Pages ativo" },
                 { frase: "Badges mostram status do projeto", subtitulo: "Passing, failing - transparência", fundo: "badges no README" }
             ]),
-
-            // ========== 6. IA (Ferramenta) - 25 prompts ==========
-            // Grupo 1: IA no dia a dia do dev
             ...criarGrupo('ia', '💻 IA no dia a dia', [
                 { frase: "Copilot não pensa por você - ele só digita mais rápido", subtitulo: "A lógica ainda é sua", fundo: "copilot sugerindo código, dev revisando" },
                 { frase: "ChatGPT é ótimo, mas não confie cegamente", subtitulo: "Confira, verifique, teste", fundo: "ChatGPT respondendo, dev verificando" },
@@ -715,7 +659,6 @@
                 { frase: "IA acelera, você entrega", subtitulo: "Mais rápido, mas não mais descuidado", fundo: "IA acelerando processo, dev entregando" },
                 { frase: "Stack Overflow + ChatGPT = dev completo", subtitulo: "Use todas as ferramentas", fundo: "Stack Overflow e ChatGPT lado a lado" }
             ]),
-            // Grupo 2: Ferramentas de IA
             ...criarGrupo('ia', '🛠️ Ferramentas de IA', [
                 { frase: "Midjourney cria, você implementa", subtitulo: "Design com IA é parceria", fundo: "imagem do Midjourney sendo implementada" },
                 { frase: "Claude, GPT, Gemini - cada um tem seu forte", subtitulo: "Escolha a ferramenta certa", fundo: "diferentes IAs, comparação" },
@@ -723,7 +666,6 @@
                 { frase: "Embeddings são a nova linguagem", subtitulo: "Vetores que representam significado", fundo: "embeddings, vetores, significado" },
                 { frase: "RAG: contexto sem retreinar", subtitulo: "Busca + IA = precisão", fundo: "RAG em ação, busca + geração" }
             ]),
-            // Grupo 3: Fundamentos de IA
             ...criarGrupo('ia', '🤖 Fundamentos de IA', [
                 { frase: "IA não é magia - é matemática", subtitulo: "Estatística + computação = IA", fundo: "fórmulas matemáticas, dados, algoritmos" },
                 { frase: "Machine learning é estatística que aprende", subtitulo: "Dados entram, modelo sai", fundo: "gráficos estatísticos, ML aprendendo" },
@@ -731,7 +673,6 @@
                 { frase: "Overfitting é decorar, não aprender", subtitulo: "Seu modelo precisa generalizar", fundo: "overfitting visualizado, modelo decorando" },
                 { frase: "Underfitting é preguiça do modelo", subtitulo: "Dê mais dados ou melhore features", fundo: "underfitting, modelo simples demais" }
             ]),
-            // Grupo 4: Ética e responsabilidade
             ...criarGrupo('ia', '⚖️ Ética em IA', [
                 { frase: "IA com viés é perigosa - cuidado", subtitulo: "Dados tendenciosos = modelo preconceituoso", fundo: "balança da justiça, dados tendenciosos" },
                 { frase: "Transparência importa - explique seu modelo", subtitulo: "Caixa preta não é aceitável", fundo: "caixa transparente, modelo explicável" },
@@ -739,7 +680,6 @@
                 { frase: "IA substitui tarefas, não pessoas", subtitulo: "Ferramenta nas mãos certas", fundo: "humano e IA colaborando, não competindo" },
                 { frase: "Responsabilidade é sua, não da IA", subtitulo: "Você responde pelo que a IA gera", fundo: "dev responsável, decisão final" }
             ]),
-            // Grupo 5: Futuro com IA
             ...criarGrupo('ia', '🔮 Futuro com IA', [
                 { frase: "O dev do futuro é um curador de IA", subtitulo: "Escolher o que usar é o diferencial", fundo: "dev selecionando outputs de IA" },
                 { frase: "IA não vai te substituir, mas um dev com IA vai", subtitulo: "Adapte-se ou fique para trás", fundo: "humano e robô trabalhando juntos" },
@@ -747,9 +687,6 @@
                 { frase: "O futuro é colaboração humano-IA", subtitulo: "Juntos somos mais fortes", fundo: "humano e IA de mãos dadas" },
                 { frase: "IA é ferramenta, não substituta", subtitulo: "Martelo não constrói casa sozinho", fundo: "caixa de ferramentas com IA destacada" }
             ]),
-
-            // ========== 7. CARREIRA - 25 prompts ==========
-            // Grupo 1: Começando na carreira
             ...criarGrupo('carreira', '🚀 Começando na carreira', [
                 { frase: "O primeiro commit é o mais difícil (depois vem o vício)", subtitulo: "Todo mundo começa do zero - inclusive você", fundo: "dev iniciante fazendo primeiro commit, tela brilhando, emoção, setup simples mas dedicado" },
                 { frase: "Junior não é quem não sabe, é quem está aprendendo (e tudo bem)", subtitulo: "Todo sênior já foi junior - lembre disso", fundo: "dev jovem estudando, livros, código, determinação, luz suave" },
@@ -757,7 +694,6 @@
                 { frase: "Errar no início é esperado, desistir é opcional", subtitulo: "Bug não é fracasso - é aprendizado compilado", fundo: "dev errando, rindo, tentando de novo, resiliência" },
                 { frase: "Você não precisa saber tudo, precisa saber aprender", subtitulo: "Aprender a aprender é a habilidade mais importante", fundo: "dev pesquisando, Google, livros, curiosidade" }
             ]),
-            // Grupo 2: Crescimento profissional
             ...criarGrupo('carreira', '📈 Crescimento profissional', [
                 { frase: "Promoção não cai do céu, cai de código entregue", subtitulo: "Resultado fala mais alto que horas trabalhadas", fundo: "dev sendo promovido, celebração, reconhecimento, team feliz" },
                 { frase: "Seu salário é reflexo dos problemas que você resolve", subtitulo: "Quanto maior o problema, maior a recompensa", fundo: "dev resolvendo problema complexo, insight, lâmpada" },
@@ -765,7 +701,6 @@
                 { frase: "Sênior é quem ensina enquanto entrega", subtitulo: "Compartilhar conhecimento multiplica impacto", fundo: "sênior mentorando juniors, troca, aprendizado" },
                 { frase: "Tech Lead não é quem mais codifica, é quem mais facilita", subtitulo: "Liderança técnica é sobre pessoas, não código", fundo: "tech lead facilitando reunião, time colaborando" }
             ]),
-            // Grupo 3: Mercado de trabalho
             ...criarGrupo('carreira', '💼 Mercado de trabalho', [
                 { frase: "Entrevista técnica é via de mão dupla (você também escolhe)", subtitulo: "Não é só eles te avaliarem - avalie a empresa também", fundo: "entrevista técnica acontecendo, ambos confiantes, respeito" },
                 { frase: "Seu LinkedIn é seu outdoor 24/7 - mantenha atualizado", subtitulo: "Recrutador pesquisa antes de chamar", fundo: "perfil do LinkedIn otimizado, conexões, recomendações" },
@@ -773,7 +708,6 @@
                 { frase: "Salário não é tudo, mas também não é nada (negocie)", subtitulo: "Conheça seu valor e peça o justo", fundo: "negociação salarial, confiança, equilíbrio" },
                 { frase: "CLT vs PJ vs gringa: escolha seu estilo de vida", subtitulo: "Não existe certo ou errado, existe o que cabe em você", fundo: "balança comparando modelos de trabalho, decisão" }
             ]),
-            // Grupo 4: Desafios da carreira
             ...criarGrupo('carreira', '⚡ Desafios da carreira', [
                 { frase: "Burnout não é badge de honra - descanse", subtitulo: "Trabalhar 12h por dia não te faz melhor", fundo: "dev descansando, equilíbrio, natureza, paz" },
                 { frase: "Síndrome do impostor ataca todo mundo (até sênior)", subtitulo: "Você não é o único que se sente assim", fundo: "dev confiante apesar das dúvidas, superação" },
@@ -781,7 +715,6 @@
                 { frase: "Comparação com os outros é o ladrão da alegria", subtitulo: "Sua jornada é única - foque nela", fundo: "dev focado no próprio progresso, ignorando comparações" },
                 { frase: "Pedir ajuda não é fraqueza - é inteligência", subtitulo: "Ninguém constrói nada sozinho", fundo: "dev pedindo ajuda, colega ajudando, time" }
             ]),
-            // Grupo 5: Planejamento de carreira
             ...criarGrupo('carreira', '🎯 Planejamento de carreira', [
                 { frase: "Plano de carreira é mapa, não GPS (pode mudar)", subtitulo: "Tenha direção, mas seja flexível", fundo: "mapa de carreira, rotas alternativas, flexibilidade" },
                 { frase: "Objetivo anual, metas mensais, ação diária", subtitulo: "Grande objetivo se constrói todo dia", fundo: "planejamento, metas, ação consistente" },
@@ -789,9 +722,6 @@
                 { frase: "Side project não é opcional - é diferencial", subtitulo: "Projeto próprio mostra paixão e proatividade", fundo: "side project sendo desenvolvido, paixão, criatividade" },
                 { frase: "Sua carreira é sua, não da empresa - assuma o controle", subtitulo: "Você é o CEO da sua própria carreira", fundo: "dev no controle do próprio destino, confiança" }
             ]),
-
-            // ========== 8. SOFT SKILLS - 25 prompts ==========
-            // Grupo 1: Comunicação
             ...criarGrupo('softskills', '🗣️ Comunicação', [
                 { frase: "Comunicação é tão importante quanto código", subtitulo: "Explique suas decisões", fundo: "pessoas conversando, dialogando" },
                 { frase: "Saber ouvir é skill rara", subtitulo: "Escute antes de falar", fundo: "escuta ativa, atenção" },
@@ -799,7 +729,6 @@
                 { frase: "Feedback é presente, não crítica", subtitulo: "Dê e receba bem", fundo: "feedback construtivo" },
                 { frase: "Comunique problemas cedo", subtitulo: "Esconder só piora", fundo: "dev comunicando problema" }
             ]),
-            // Grupo 2: Trabalho em equipe
             ...criarGrupo('softskills', '👥 Trabalho em equipe', [
                 { frase: "Sozinho vai mais rápido, junto vai mais longe", subtitulo: "Time vence individual", fundo: "equipe unida, colaborando" },
                 { frase: "Conflitos acontecem - resolva com respeito", subtitulo: "Diferentes opiniões, mesmo objetivo", fundo: "resolução de conflitos" },
@@ -807,7 +736,6 @@
                 { frase: "Apoie colegas em dificuldade", subtitulo: "Hoje por eles, amanhã por você", fundo: "ajuda mútua no trabalho" },
                 { frase: "Diversidade fortalece o time", subtitulo: "Diferentes perspectivas = melhores soluções", fundo: "time diverso e feliz" }
             ]),
-            // Grupo 3: Liderança
             ...criarGrupo('softskills', '👑 Liderança', [
                 { frase: "Liderança não é cargo - é atitude", subtitulo: "Inspire onde estiver", fundo: "liderança, inspiração" },
                 { frase: "Líder serve o time, não o contrário", subtitulo: "Servant leadership", fundo: "líder ajudando o time" },
@@ -815,7 +743,6 @@
                 { frase: "Reconheça o bom trabalho", subtitulo: "Elogio público motiva", fundo: "reconhecimento, palmas" },
                 { frase: "Seja exemplo, não só chefe", subtitulo: "Atitudes falam mais", fundo: "líder como exemplo" }
             ]),
-            // Grupo 4: Inteligência emocional
             ...criarGrupo('softskills', '🧠 Inteligência emocional', [
                 { frase: "Respire antes de reagir", subtitulo: "Calma resolve mais que pressa", fundo: "calma, respiração" },
                 { frase: "Frustração faz parte - gerencie", subtitulo: "Bug não resolve na raiva", fundo: "dev frustrado mas controlando" },
@@ -823,7 +750,6 @@
                 { frase: "Empatia com colega faz diferença", subtitulo: "Todo mundo tem dias ruins", fundo: "empatia, compreensão" },
                 { frase: "Resiliência é aprender com queda", subtitulo: "Cair, levantar, seguir", fundo: "pessoa levantando após queda" }
             ]),
-            // Grupo 5: Produtividade
             ...criarGrupo('softskills', '⚡ Produtividade', [
                 { frase: "Pomodoro > 8h diretas", subtitulo: "Foco + pausa = resultado", fundo: "técnica pomodoro, timer" },
                 { frase: "Priorize: importante vs urgente", subtitulo: "Matriz Eisenhower salva", fundo: "matriz de prioridades" },
@@ -831,9 +757,6 @@
                 { frase: "Descanse - burnout não é badge", subtitulo: "Produtivo descansa", fundo: "dev descansando, paz" },
                 { frase: "Planejamento evita correria", subtitulo: "Organize-se para entregar", fundo: "planejamento, agenda" }
             ]),
-
-            // ========== 9. DESIGN - 25 prompts ==========
-            // Grupo 1: Fundamentos de design
             ...criarGrupo('design', '🎯 Fundamentos', [
                 { frase: "Design é resolver problemas, não só embelezar", subtitulo: "Forma segue função - sempre", fundo: "problema sendo resolvido pelo design" },
                 { frase: "Hierarquia visual guia o olhar", subtitulo: "O que é mais importante? Mostre", fundo: "hierarquia visual clara, elementos em ordem" },
@@ -841,7 +764,6 @@
                 { frase: "Espaço em branco é respiro", subtitulo: "Menos poluição, mais foco", fundo: "design com espaço em branco, elegância" },
                 { frase: "Consistência cria confiança", subtitulo: "Padrões são seus amigos", fundo: "elementos consistentes repetidos" }
             ]),
-            // Grupo 2: UI Design
             ...criarGrupo('design', '🖌️ UI Design', [
                 { frase: "UI é a roupa do produto", subtitulo: "Primeira impressão importa", fundo: "interface bonita, primeira impressão" },
                 { frase: "Cores comunicam antes das palavras", subtitulo: "Psicologia das cores não é mimimi", fundo: "psicologia das cores, emoções" },
@@ -849,7 +771,6 @@
                 { frase: "Pixel perfeito é estado de espírito", subtitulo: "Detalhe faz diferença", fundo: "lupa examinando pixels" },
                 { frase: "Microinterações criam conexão", subtitulo: "Pequenos detalhes encantam", fundo: "microinterações, animações sutis" }
             ]),
-            // Grupo 3: UX Design
             ...criarGrupo('design', '🧭 UX Design', [
                 { frase: "UX é a ponte entre usuário e tecnologia", subtitulo: "Seu avô precisa entender também", fundo: "ponte conectando usuário à tecnologia" },
                 { frase: "Usuário não lê - ele escaneia", subtitulo: "Padrão F, padrão Z - conheça", fundo: "padrão de leitura F, escaneamento" },
@@ -857,7 +778,6 @@
                 { frase: "Jornada do usuário é um mapa", subtitulo: "Entenda cada passo", fundo: "mapa de jornada, touchpoints" },
                 { frase: "Teste com usuário - sempre", subtitulo: "Você não é seu usuário", fundo: "teste de usabilidade, observação" }
             ]),
-            // Grupo 4: Design System
             ...criarGrupo('design', '📚 Design System', [
                 { frase: "Design system é consistência em escala", subtitulo: "Time grande, padrão único", fundo: "design system documentado" },
                 { frase: "Componentes reutilizáveis salvam", subtitulo: "Não reinvente a roda", fundo: "componentes em biblioteca" },
@@ -865,7 +785,6 @@
                 { frase: "Documentação é lei - siga", subtitulo: "Time alinhado = produto consistente", fundo: "documentação sendo lida" },
                 { frase: "Evolua o sistema, não quebre", subtitulo: "Mudanças graduais, não revoluções", fundo: "evolução do design system" }
             ]),
-            // Grupo 5: Ferramentas e processo
             ...criarGrupo('design', '🔧 Ferramentas', [
                 { frase: "Figma é o novo Photoshop (e melhor)", subtitulo: "Colaboração em tempo real", fundo: "Figma aberto, times colaborando" },
                 { frase: "Wireframe é esqueleto, protótipo é pele", subtitulo: "Valide antes de investir", fundo: "wireframe evoluindo para protótipo" },
@@ -873,9 +792,6 @@
                 { frase: "Iteração é caminho para perfeição", subtitulo: "Nunca fica pronto, sempre melhora", fundo: "versões iterativas do design" },
                 { frase: "Inspiração não cai do céu - busque", subtitulo: "Referências são combustível", fundo: "mood board, referências" }
             ]),
-
-            // ========== 10. DADOS - 25 prompts ==========
-            // Grupo 1: Fundamentos de dados
             ...criarGrupo('dados', '📊 Fundamentos', [
                 { frase: "Dado é o novo petróleo - refine", subtitulo: "Coletar é fácil, extrair valor é skill", fundo: "dados brutos sendo refinados" },
                 { frase: "Qualidade do dado define tudo", subtitulo: "Garbage in, garbage out", fundo: "dados de qualidade" },
@@ -883,7 +799,6 @@
                 { frase: "Outlier é erro ou oportunidade", subtitulo: "Investigue antes de ignorar", fundo: "outliers destacados" },
                 { frase: "Dado sem contexto é número perdido", subtitulo: "Conte a história completa", fundo: "dados com contexto" }
             ]),
-            // Grupo 2: Análise de dados
             ...criarGrupo('dados', '📈 Análise', [
                 { frase: "Analytics entende usuário", subtitulo: "Números contam histórias", fundo: "dashboard analytics" },
                 { frase: "Métrica certa, decisão certa", subtitulo: "KPI errado leva ao caminho errado", fundo: "KPIs corretos" },
@@ -891,7 +806,6 @@
                 { frase: "Dashboard é visão 360", subtitulo: "O que não é medido não é gerenciado", fundo: "dashboard completo" },
                 { frase: "Data driven é cultura", subtitulo: "Achismo vs evidência", fundo: "decisões baseadas em dados" }
             ]),
-            // Grupo 3: Visualização
             ...criarGrupo('dados', '📉 Visualização', [
                 { frase: "Visualização conta história", subtitulo: "Gráfico vale mais que tabela", fundo: "visualização de dados" },
                 { frase: "Gráfico certo, insight na hora", subtitulo: "Escolha a visualização certa", fundo: "gráficos variados" },
@@ -899,7 +813,6 @@
                 { frase: "Cores em gráficos importam", subtitulo: "Não confunda o usuário", fundo: "cores em gráficos" },
                 { frase: "Simplicidade em visualização vence", subtitulo: "Menos é mais", fundo: "gráfico simples e claro" }
             ]),
-            // Grupo 4: Big Data
             ...criarGrupo('dados', '🌊 Big Data', [
                 { frase: "Big data é volume, insight é valor", subtitulo: "Não adianta ter e não usar", fundo: "big data, insights" },
                 { frase: "Data pipeline é o escoamento", subtitulo: "Do dado bruto ao insight", fundo: "pipeline de dados" },
@@ -907,7 +820,6 @@
                 { frase: "Batch vs stream - quando usar", subtitulo: "Tempo real nem sempre é necessário", fundo: "batch vs streaming" },
                 { frase: "Data lake é oceano de dados", subtitulo: "Tudo guardado, tudo disponível", fundo: "data lake, armazenamento" }
             ]),
-            // Grupo 5: Ética em dados
             ...criarGrupo('dados', '🔒 Ética', [
                 { frase: "Privacidade é direito - respeite", subtitulo: "LGPD não é brincadeira", fundo: "privacidade, proteção" },
                 { frase: "Anonimização não é opcional", subtitulo: "Proteja dados sensíveis", fundo: "anonimização de dados" },
@@ -915,9 +827,6 @@
                 { frase: "Transparência gera confiança", subtitulo: "Explique como usa dados", fundo: "transparência, confiança" },
                 { frase: "Dado com propósito transforma", subtitulo: "Use para o bem", fundo: "dados transformando vidas" }
             ]),
-
-            // ========== 11. INOVAÇÃO - 25 prompts ==========
-            // Grupo 1: Mindset inovador
             ...criarGrupo('inovacao', '💡 Mindset inovador', [
                 { frase: "Inovação é necessidade, não luxo", subtitulo: "Evoluir ou ficar para trás", fundo: "inovação, evolução" },
                 { frase: "Questionar o status quo é o primeiro passo", subtitulo: "Por que sempre foi assim?", fundo: "questionamento, mudança" },
@@ -925,7 +834,6 @@
                 { frase: "Curiosidade move a inovação", subtitulo: "Pergunte 'e se...'", fundo: "curiosidade, descoberta" },
                 { frase: "Inovação não tem idade", subtitulo: "Comece agora", fundo: "idade, inovação" }
             ]),
-            // Grupo 2: Processo criativo
             ...criarGrupo('inovacao', '🎨 Processo criativo', [
                 { frase: "Inspiração existe - mas busca", subtitulo: "Não espere cair do céu", fundo: "inspiração, busca" },
                 { frase: "Brainstorm sem julgamento primeiro", subtitulo: "Toda ideia é bem-vinda", fundo: "brainstorm, ideias" },
@@ -933,7 +841,6 @@
                 { frase: "Feedback é combustível da inovação", subtitulo: "Mostre, receba, melhore", fundo: "feedback, melhoria" },
                 { frase: "Iteração leva à perfeição", subtitulo: "Nunca fica pronto, sempre melhora", fundo: "iteração, evolução" }
             ]),
-            // Grupo 3: Tecnologias emergentes
             ...criarGrupo('inovacao', '🚀 Tecnologias emergentes', [
                 { frase: "IA generativa mudou o jogo", subtitulo: "Acompanhe ou fique", fundo: "IA generativa" },
                 { frase: "Blockchain vai além de cripto", subtitulo: "Descentralização é o futuro", fundo: "blockchain" },
@@ -941,7 +848,6 @@
                 { frase: "Edge computing é o novo cloud", subtitulo: "Processamento perto do usuário", fundo: "edge computing" },
                 { frase: "Web3 ainda está começando", subtitulo: "Acompanhe de perto", fundo: "Web3" }
             ]),
-            // Grupo 4: Inovação na prática
             ...criarGrupo('inovacao', '🔧 Inovação na prática', [
                 { frase: "Hackathon gera inovação", subtitulo: "24h, café, código", fundo: "hackathon, times" },
                 { frase: "Side project vira startup", subtitulo: "Histórias que começam assim", fundo: "side project evoluindo" },
@@ -949,7 +855,6 @@
                 { frase: "Inovação não precisa ser complexa", subtitulo: "Simples que resolve", fundo: "solução simples" },
                 { frase: "Tecnologia com propósito transforma", subtitulo: "Impacto real", fundo: "propósito, transformação" }
             ]),
-            // Grupo 5: Futuro
             ...criarGrupo('inovacao', '🔮 Futuro', [
                 { frase: "O futuro é digital, mas humano", subtitulo: "Tecnologia com propósito", fundo: "futuro digital e humano" },
                 { frase: "Construa seu legado", subtitulo: "Marcas que ficam", fundo: "legado" },
@@ -957,9 +862,6 @@
                 { frase: "O melhor código ainda está por vir", subtitulo: "Futuro em construção", fundo: "futuro, código" },
                 { frase: "Continue inovando, continue evoluindo", subtitulo: "Não pare", fundo: "evolução contínua" }
             ]),
-
-            // ========== 12. FRASES CURTAS - 25 prompts ==========
-            // Grupo 1: Código limpo
             ...criarGrupo('curtas', '🧹 Código limpo', [
                 { frase: "Menos código, mais solução", subtitulo: "Quantidade não é qualidade", fundo: "poucas linhas, muito resultado" },
                 { frase: "Legível > Inteligente", subtitulo: "Código claro é código mantível", fundo: "código legível" },
@@ -967,7 +869,6 @@
                 { frase: "Simplicidade é poder", subtitulo: "Complexidade é inimiga", fundo: "simplicidade" },
                 { frase: "Refatorar é preciso", subtitulo: "Evolução contínua", fundo: "refatoração" }
             ]),
-            // Grupo 2: Debug
             ...criarGrupo('curtas', '🐛 Debug', [
                 { frase: "Bug é feature não documentada", subtitulo: "Ou só um erro mesmo", fundo: "bug, humor" },
                 { frase: "Apressado come bug", subtitulo: "Pressa é inimiga da qualidade", fundo: "pressa, bugs" },
@@ -975,7 +876,6 @@
                 { frase: "O erro está entre a cadeira e o teclado", subtitulo: "PEBCAK clássico", fundo: "dev e teclado" },
                 { frase: "Leia o erro antes de agir", subtitulo: "A mensagem está ali por um motivo", fundo: "mensagem de erro" }
             ]),
-            // Grupo 3: Produtividade
             ...criarGrupo('curtas', '⚡ Produtividade', [
                 { frase: "Foco é tudo", subtitulo: "Sem distração, sem erro", fundo: "foco" },
                 { frase: "Consistência vence", subtitulo: "Pequeno todo dia", fundo: "consistência" },
@@ -983,7 +883,6 @@
                 { frase: "Pensar > Digitar", subtitulo: "Raciocínio vale ouro", fundo: "pensamento profundo" },
                 { frase: "Código limpo, mente sã", subtitulo: "Organização mental", fundo: "mente sã, código limpo" }
             ]),
-            // Grupo 4: Filosofia dev
             ...criarGrupo('curtas', '🤔 Filosofia dev', [
                 { frase: "Programar é resolver problemas", subtitulo: "Computador só executa", fundo: "problemas sendo resolvidos" },
                 { frase: "Código é poesia em lógica", subtitulo: "Elegância também importa", fundo: "código poético" },
@@ -991,7 +890,6 @@
                 { frase: "Teste é segurança, não burocracia", subtitulo: "Dormir tranquilo", fundo: "testes passando" },
                 { frase: "Código é contrato", subtitulo: "Compromisso com a qualidade", fundo: "contrato, código" }
             ]),
-            // Grupo 5: Carreira e vida
             ...criarGrupo('curtas', '🌟 Carreira e vida', [
                 { frase: "Sua carreira é sua", subtitulo: "Assuma o controle", fundo: "controle da carreira" },
                 { frase: "Aprenda sempre", subtitulo: "Nunca sabe tudo", fundo: "aprendizado contínuo" },
@@ -1001,7 +899,6 @@
             ])
         ];
 
-        // Hashtags por tema (ampliadas)
         const hashtagsTemas = {
             carreira: ["#CarreiraTech", "#DesenvolvimentoProfissional", "#DevLife", "#Programador", "#Tecnologia", "#MercadoTech", "#CrescimentoProfissional", "#Networking", "#Mentoria", "#SucessoProfissional", "#HumildadeTech", "#AprendizadoContínuo", "#PlanoDeCarreira", "#EvoluçãoProfissional"],
             programacao: ["#Programacao", "#DevTips", "#CodigoLimpo", "#CleanCode", "#LogicaDeProgramacao", "#Algoritmos", "#EstruturaDeDados", "#Programador", "#Coding", "#SoftwareDevelopment", "#DebuggingLife", "#BugHunter", "#TestesAutomatizados", "#Git"],
@@ -1017,7 +914,6 @@
             curtas: ["#DevLife", "#Programador", "#Coding", "#TechTips", "#Code", "#Developer", "#SoftwareEngineer", "#ProgrammerHumor", "#DevCommunity", "#100DaysOfCode", "#CodeNewbie", "#TechHumor", "#FrasesDeDev", "#MotivacaoDev"]
         };
 
-        // Estado da aplicação
         let promptsUsados = [];
         let ultimoPrompt = null;
         let contadorGeracoes = 0;
@@ -1025,7 +921,6 @@
         let grupoAtual = '';
         let sequenciaAtual = 0;
 
-        // Elementos DOM
         const gerarBtn = document.getElementById('gerarBtn');
         const resetBtn = document.getElementById('resetBtn');
         const resultadoDiv = document.getElementById('resultado');
@@ -1084,7 +979,6 @@
             setTimeout(() => {
                 const filtroCategoria = document.getElementById('filtroCategoria').value;
 
-                // Filtrar prompts pela categoria selecionada
                 let promptsDisponiveis = promptsDatabase;
                 if (filtroCategoria !== 'todas') {
                     promptsDisponiveis = promptsDatabase.filter(p => p.tema === filtroCategoria);
@@ -1096,34 +990,27 @@
                     return;
                 }
 
-                // Encontrar o próximo prompt na sequência (post 1,2,3,4,5)
                 let promptEscolhido = null;
 
-                // Primeiro, verificar se já existe um grupo em andamento
                 const ultimoPromptDoGrupo = promptsUsados.length > 0
                     ? promptsDatabase[promptsUsados[promptsUsados.length - 1]]
                     : null;
 
                 if (ultimoPromptDoGrupo) {
-                    // Verificar se o último grupo ainda tem posts para serem gerados
                     const promptsDoGrupo = promptsDisponiveis.filter(p =>
                         p.tema === ultimoPromptDoGrupo.tema &&
                         p.grupo === ultimoPromptDoGrupo.grupo
                     );
 
-                    // Encontrar o próximo número da sequência
                     const proximaSequencia = ultimoPromptDoGrupo.sequencia + 1;
 
-                    // Procurar o prompt com a próxima sequência no mesmo grupo
                     promptEscolhido = promptsDoGrupo.find(p =>
                         p.sequencia === proximaSequencia &&
                         !promptsUsados.includes(promptsDatabase.indexOf(p))
                     );
                 }
 
-                // Se não encontrou continuação do grupo atual, começar um novo grupo
                 if (!promptEscolhido) {
-                    // Agrupar prompts não usados por tema/grupo
                     const gruposDisponiveis = {};
 
                     promptsDisponiveis.forEach((p, index) => {
@@ -1136,7 +1023,6 @@
                         }
                     });
 
-                    // Escolher um grupo aleatório que tenha posts disponíveis
                     const chavesGrupos = Object.keys(gruposDisponiveis);
 
                     if (chavesGrupos.length === 0) {
@@ -1148,14 +1034,11 @@
                     const chaveEscolhida = chavesGrupos[Math.floor(Math.random() * chavesGrupos.length)];
                     const promptsDoGrupo = gruposDisponiveis[chaveEscolhida];
 
-                    // Ordenar por sequência (1 a 5)
                     promptsDoGrupo.sort((a, b) => a.sequencia - b.sequencia);
 
-                    // Pegar o primeiro não usado (sequência 1)
                     promptEscolhido = promptsDoGrupo[0];
                 }
 
-                // Encontrar o índice do prompt escolhido
                 const indiceEscolhido = promptsDatabase.findIndex(p =>
                     p.tema === promptEscolhido.tema &&
                     p.grupo === promptEscolhido.grupo &&
@@ -1169,7 +1052,6 @@
                 contadorGeracoesSpan.textContent = contadorGeracoes;
                 temasRestantesSpan.textContent = promptsDatabase.length - promptsUsados.length;
 
-                // Atualiza informações do grupo/carrossel
                 atualizarInfoGrupo(promptEscolhido);
 
                 const estilo = document.getElementById('estilo').value;
@@ -1224,7 +1106,6 @@ A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase
                     resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
 
-                // Atualiza o ultimoPrompt com todos os dados necessários
                 ultimoPrompt = {
                     prompt: promptIA,
                     frase: promptEscolhido.frase,
@@ -1256,7 +1137,6 @@ A imagem deve parecer um post motivacional/inspirador de tecnologia, com a frase
         function copiarFrase() {
             if (!ultimoPrompt) return mostrarToast('❌ Gere um prompt primeiro');
 
-            // Gerar explicação automática baseada na categoria
             let explicacao = "";
 
             switch (ultimoPrompt.categoria) {
@@ -1377,7 +1257,6 @@ ${ultimoPrompt.hashtags.join(' ')}
             }
         }
 
-        // Inicialização
         gerarBtn.addEventListener('click', gerarPromptUnico);
         resetBtn.addEventListener('click', resetarProgresso);
         copiarPromptBtn.addEventListener('click', copiarPrompt);
@@ -1392,5 +1271,4 @@ ${ultimoPrompt.hashtags.join(' ')}
         });
     </script>
 </body>
-
 </html>
